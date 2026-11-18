@@ -113,3 +113,31 @@ fn fenced_code_keeps_language_and_escapes_html() {
     assert!(html.contains("&lt;script&gt;"));
     assert!(!html.contains("<script>"));
 }
+
+#[test]
+fn adversarial_destinations_and_attribute_text_stay_inert() {
+    for source in [
+        "[run](<JaVaScRiPt:alert(1)>)",
+        "![image](data:image/svg+xml,bad)",
+        "[command](command:workbench.action)",
+    ] {
+        let html = render(source);
+        assert!(!html.to_ascii_lowercase().contains("javascript:"));
+        assert!(!html.contains("data:"));
+        assert!(!html.contains("command:"));
+    }
+    let html = render(
+        "![\" onerror=\"alert(1)](./image.png)\n\n<iframe srcdoc='<script>bad</script>'></iframe>",
+    );
+    assert!(!html.contains(" onerror=\""));
+    assert!(!html.contains("<iframe"));
+    assert!(!html.contains("<script>"));
+    for url in [
+        "//remote.test/x",
+        "\\\\remote.test\\x",
+        "java\rscript:bad",
+        "\0https://example.com",
+    ] {
+        assert!(!mdcore::safe_url(url, false));
+    }
+}

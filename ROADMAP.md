@@ -65,7 +65,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Resolve local markdown links relative to the current file.
 - [x] Resolve local images with restricted access.
 - [x] Give tables and long code safe overflow behavior.
-- [ ] Test malicious markdown and resource URLs.
+- [x] Test malicious markdown and resource URLs.
 - [ ] Review rendering parity and security.
 
 ## 6. UI polish

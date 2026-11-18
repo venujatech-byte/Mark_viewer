@@ -275,4 +275,24 @@ mod tests {
         oversized.set_len(10 * 1024 * 1024 + 1).unwrap();
         assert!(image_bytes(&document, "large.png").is_err());
     }
+    #[cfg(unix)]
+    #[test]
+    fn encoded_traversal_and_symlinks_cannot_escape_image_scope() {
+        let dir = tempfile::tempdir().unwrap();
+        let folder = dir.path().join("docs");
+        std::fs::create_dir(&folder).unwrap();
+        let document = folder.join("README.md");
+        let private = dir.path().join("private.png");
+        std::fs::write(&document, "text").unwrap();
+        std::fs::write(&private, "private bytes").unwrap();
+        std::os::unix::fs::symlink(&private, folder.join("link.png")).unwrap();
+        for url in [
+            "link.png",
+            "..%2Fprivate.png",
+            "../private.png",
+            "file:///etc/passwd",
+        ] {
+            assert!(image_bytes(&document, url).is_err(), "{url}");
+        }
+    }
 }
