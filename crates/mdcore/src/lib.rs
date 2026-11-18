@@ -3,6 +3,10 @@
 mod document;
 mod edit;
 pub use edit::{apply_editor_text, editor_source, minimal_edit};
+#[cfg(not(target_arch = "wasm32"))]
+mod file;
+#[cfg(not(target_arch = "wasm32"))]
+pub use file::FileDocument;
 mod frontmatter;
 pub use document::Document;
 pub use frontmatter::split_frontmatter;
