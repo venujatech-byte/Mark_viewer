@@ -29,7 +29,10 @@ pub fn render(source: &str) -> String {
         html::push_html(&mut output, [Event::Text(metadata.into())].into_iter());
         output.push_str("</pre></details>\n");
     }
-    let options = Options::ENABLE_TABLES | Options::ENABLE_TASKLISTS | Options::ENABLE_FOOTNOTES;
+    let options = Options::ENABLE_TABLES
+        | Options::ENABLE_TASKLISTS
+        | Options::ENABLE_FOOTNOTES
+        | Options::ENABLE_STRIKETHROUGH;
     let events = Parser::new_ext(body, options).map(|event| match event {
         Event::Html(text) | Event::InlineHtml(text) => Event::Text(text),
         Event::Start(mut tag) => {

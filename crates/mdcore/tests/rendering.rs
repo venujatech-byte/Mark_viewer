@@ -98,3 +98,10 @@ fn footnotes_link_references_to_their_definitions() {
     assert!(html.contains("<strong>evidence</strong>"));
     assert!(!html.contains("[^safe]"));
 }
+
+#[test]
+fn strikethrough_renders_without_changing_literal_code() {
+    let html = render("~~obsolete~~ and `~~literal~~`");
+    assert!(html.contains("<del>obsolete</del>"));
+    assert!(html.contains("<code>~~literal~~</code>"));
+}

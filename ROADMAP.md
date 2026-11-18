@@ -58,7 +58,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Enable and test tables.
 - [x] Enable and test task lists.
 - [x] Enable and test footnotes.
-- [ ] Enable and test strikethrough.
+- [x] Enable and test strikethrough.
 - [ ] Style fenced and inline code blocks.
 - [ ] Add syntax highlighting with an existing maintained library.
 - [ ] Open safe external links through the host.
