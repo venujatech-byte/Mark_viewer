@@ -1,4 +1,4 @@
-use std::{fs, io, path::Path};
+use std::{fs, io, ops::Range, path::Path};
 
 /// A UTF-8 markdown source. Rendering never mutates this text.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -13,6 +13,18 @@ impl Document {
 
     pub fn read(path: impl AsRef<Path>) -> io::Result<Self> {
         fs::read_to_string(path).map(Self::new)
+    }
+
+    /// Replace a UTF-8 byte range, leaving all other bytes untouched.
+    pub fn edit(&mut self, range: Range<usize>, replacement: &str) -> io::Result<()> {
+        if self.source.get(range.clone()).is_none() {
+            return Err(io::Error::new(
+                io::ErrorKind::InvalidInput,
+                "edit must be an ordered UTF-8 byte range inside the document",
+            ));
+        }
+        self.source.replace_range(range, replacement);
+        Ok(())
     }
 
     pub fn source(&self) -> &str {

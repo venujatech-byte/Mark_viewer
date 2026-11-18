@@ -19,7 +19,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Detect YAML frontmatter while retaining its original bytes.
 - [x] Render metadata separately from the markdown body.
 - [x] Test BOM, CRLF, empty, and unterminated frontmatter.
-- [ ] Apply validated UTF-8 byte-range edits.
+- [x] Apply validated UTF-8 byte-range edits.
 - [ ] Test invalid and multibyte edit boundaries.
 - [ ] Translate source-editor changes into a minimal edit.
 - [ ] Preserve original newlines through source-editor normalization.
