@@ -64,3 +64,24 @@ fn symlink_target_and_permissions_survive_saving() {
     );
     assert_eq!(fs::read_to_string(&target).unwrap(), "new");
 }
+
+#[test]
+fn no_op_save_keeps_timestamps_and_bytes() {
+    let directory = tempfile::tempdir().unwrap();
+    for (i, source) in [
+        "",
+        "no final newline  ",
+        "\u{feff}---\r\nkey: value\r\n---\r\n",
+        "a\rb\nend\r\n",
+    ]
+    .iter()
+    .enumerate()
+    {
+        let path = directory.path().join(format!("{i}.md"));
+        fs::write(&path, source).unwrap();
+        let before = fs::metadata(&path).unwrap().modified().unwrap();
+        FileDocument::open(&path).unwrap().save().unwrap();
+        assert_eq!(fs::read(&path).unwrap(), source.as_bytes());
+        assert_eq!(fs::metadata(&path).unwrap().modified().unwrap(), before);
+    }
+}
