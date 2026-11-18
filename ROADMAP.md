@@ -73,7 +73,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Follow system light and dark themes.
 - [x] Polish toolbar and document identity.
 - [x] Add accessible focus and semantic regions.
-- [ ] Adapt edit panes to narrow windows.
+- [x] Adapt edit panes to narrow windows.
 - [ ] Add clear busy, empty, and error states.
 - [ ] Respect reduced motion and forced colors.
 - [ ] Verify keyboard-only operation.
