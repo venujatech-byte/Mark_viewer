@@ -148,3 +148,9 @@ window is inactive (`document.hasFocus() == false`), so native computed focus
 rings cannot be evaluated; declared rules are checked there and active focus is
 checked with Chromium during visual inspection. Do not remove focus styles to
 make an inactive-window test pass.
+
+## UI completion
+The UI review is in docs/ui-review.md. Both themes passed 1440/768/390px
+inspection and active keyboard checks in Chromium. The final review merged
+duplicate stylesheet declarations and reused font tokens; repeat visual checks
+passed afterward. No UI framework, custom font download, or animation is needed.

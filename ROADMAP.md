@@ -78,7 +78,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Respect reduced motion and forced colors.
 - [x] Verify keyboard-only operation.
 - [x] Inspect light and dark screenshots at three widths.
-- [ ] Review and simplify shared frontend assets.
+- [x] Review and simplify shared frontend assets.
 
 ## 7. WASM
 - [ ] Add optional wasm-bindgen exports without filesystem access.
