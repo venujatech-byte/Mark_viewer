@@ -105,3 +105,11 @@ fn strikethrough_renders_without_changing_literal_code() {
     assert!(html.contains("<del>obsolete</del>"));
     assert!(html.contains("<code>~~literal~~</code>"));
 }
+
+#[test]
+fn fenced_code_keeps_language_and_escapes_html() {
+    let html = render("```rust\nfn main() { println!(\"<script>\"); }\n```\n");
+    assert!(html.contains("<pre><code class=\"language-rust\">"));
+    assert!(html.contains("&lt;script&gt;"));
+    assert!(!html.contains("<script>"));
+}

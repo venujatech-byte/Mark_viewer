@@ -27,3 +27,6 @@ button { font: inherit; font-size: 14px; padding: 8px 14px; border: 1px solid #c
 .panes.editing { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; }
 #source-pane label { display: block; color: #56615a; font-size: 12px; margin: 8px 0; }
 #source { display: block; width: 100%; min-height: 65vh; resize: vertical; border: 1px solid #c6cdca; border-radius: 6px; padding: 20px; font: 14px/1.7 ui-monospace, "SFMono-Regular", Consolas, monospace; color: inherit; background: transparent; }
+.markdown code { font: 0.875em/1.6 ui-monospace, "SFMono-Regular", Consolas, monospace; background: #f1f4f2; padding: 0.18em 0.35em; border-radius: 4px; }
+.markdown pre { padding: 20px 24px; background: #f4f6f5; border-radius: 6px; overflow: auto; }
+.markdown pre code { padding: 0; border-radius: 0; background: transparent; white-space: pre; }

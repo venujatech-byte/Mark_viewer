@@ -59,7 +59,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Enable and test task lists.
 - [x] Enable and test footnotes.
 - [x] Enable and test strikethrough.
-- [ ] Style fenced and inline code blocks.
+- [x] Style fenced and inline code blocks.
 - [ ] Add syntax highlighting with an existing maintained library.
 - [ ] Open safe external links through the host.
 - [ ] Resolve local markdown links relative to the current file.
