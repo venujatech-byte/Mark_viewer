@@ -107,7 +107,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [ ] Review desktop and extension behavior together.
 
 ## 9. Documentation and packaging
-- [ ] Write README setup and desktop usage.
+- [x] Write README setup and desktop usage.
 - [ ] Document markdown and frontmatter behavior.
 - [ ] Document save safety and conflict recovery.
 - [ ] Document desktop packaging prerequisites and commands.
