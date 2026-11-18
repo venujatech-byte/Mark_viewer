@@ -205,3 +205,25 @@ test('a save conflict leaves source dirty and available for recovery', async () 
   assert.equal(app.elements.get('#status').textContent, 'Unsaved changes');
   assert.match(app.elements.get('#error').textContent, /changed on disk.*copy them/);
 });
+
+test('rapid inputs serialize and undoing to the saved source clears dirty state', async () => {
+  const updates = [];
+  const app = reader(async (command, data) => {
+    if (command === 'open_document') return { path: '/a.md', source: 'Original', html: '<p>Original</p>' };
+    if (command === 'edit_source') { updates.push([data.source, data.updated]); return data.updated; }
+    if (command === 'render_document') return data.source;
+    throw new Error(command);
+  });
+  await app.open();
+  app.elements.get('#source').value = 'First';
+  const first = app.elements.get('#source').input();
+  app.elements.get('#source').value = 'Second';
+  const second = app.elements.get('#source').input();
+  await Promise.all([first, second]);
+  assert.deepEqual(updates, [['Original', 'First'], ['First', 'Second']]);
+  assert.equal(app.elements.get('#preview').innerHTML, 'Second');
+  app.elements.get('#source').value = 'Original';
+  await app.elements.get('#source').input();
+  assert.equal(app.elements.get('#save').disabled, true);
+  assert.equal(app.elements.get('#status').textContent, 'Saved');
+});

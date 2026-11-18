@@ -51,7 +51,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Guard window close with unsaved edits.
 - [x] Add open, save, and toggle keyboard shortcuts.
 - [x] Surface save conflicts without discarding edits.
-- [ ] Test frontend editing state transitions.
+- [x] Test frontend editing state transitions.
 - [ ] Review and smoke-test the full desktop edit cycle.
 
 ## 5. Markdown rendering polish
