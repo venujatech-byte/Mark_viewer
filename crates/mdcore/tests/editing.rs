@@ -35,3 +35,14 @@ fn invalid_ranges_never_mutate_the_document() {
     document.edit(0..document.source().len(), "").unwrap();
     assert_eq!(document.source(), "");
 }
+
+#[test]
+fn editor_inputs_preserve_bom_and_untouched_mixed_newlines() {
+    let source = "\u{feff}---\r\nname: skill\r\n---\r\n# Old\nEnd\r";
+    let normalized = mdcore::editor_source(source);
+    assert_eq!(mdcore::apply_editor_text(source, &normalized), source);
+    let changed = mdcore::apply_editor_text(source, &normalized.replace("Old", "🦀\nNew"));
+    assert_eq!(changed, source.replace("Old", "🦀\r\nNew"));
+    assert_eq!(mdcore::apply_editor_text("a\rb", "a\nc\nb"), "a\rc\rb");
+    assert_eq!(mdcore::apply_editor_text("a🦀\r\nz", "a界\nz"), "a界\r\nz");
+}

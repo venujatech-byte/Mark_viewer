@@ -2,7 +2,7 @@
 
 mod document;
 mod edit;
-pub use edit::minimal_edit;
+pub use edit::{apply_editor_text, editor_source, minimal_edit};
 mod frontmatter;
 pub use document::Document;
 pub use frontmatter::split_frontmatter;
