@@ -36,16 +36,9 @@ impl FileDocument {
 
     /// Atomically replace the file after verifying its last-read bytes.
     pub fn save(&mut self) -> io::Result<()> {
-        self.check_unchanged()?;
+        let metadata = self.check_unchanged()?;
         if self.document.source() == self.saved {
             return Ok(());
-        }
-        let metadata = fs::symlink_metadata(&self.path)?;
-        if !metadata.is_file() {
-            return Err(io::Error::new(
-                io::ErrorKind::InvalidInput,
-                "file was replaced with a non-regular file",
-            ));
         }
         #[cfg(unix)]
         {
@@ -82,13 +75,21 @@ impl FileDocument {
         Ok(())
     }
 
-    fn check_unchanged(&self) -> io::Result<()> {
+    fn check_unchanged(&self) -> io::Result<fs::Metadata> {
+        let metadata = fs::symlink_metadata(&self.path)?;
+        if !metadata.is_file() {
+            return Err(io::Error::new(
+                io::ErrorKind::InvalidInput,
+                "file was replaced with a non-regular file",
+            ));
+        }
+
         if fs::read(&self.path)? != self.saved.as_bytes() {
             return Err(io::Error::new(
                 io::ErrorKind::AlreadyExists,
                 "file changed on disk; reopen it or copy your edits before saving",
             ));
         }
-        Ok(())
+        Ok(metadata)
     }
 }

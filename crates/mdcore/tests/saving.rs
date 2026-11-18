@@ -129,3 +129,20 @@ fn sequential_writers_detect_conflicts_and_deleted_files() {
         std::io::ErrorKind::InvalidData
     );
 }
+
+#[cfg(unix)]
+#[test]
+fn replacing_the_open_target_with_a_symlink_is_rejected() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("original.md");
+    let other = directory.path().join("other.md");
+    fs::write(&path, "same").unwrap();
+    fs::write(&other, "same").unwrap();
+    let mut file = FileDocument::open(&path).unwrap();
+    file.document.edit(0..4, "changed").unwrap();
+    fs::remove_file(&path).unwrap();
+    std::os::unix::fs::symlink(&other, &path).unwrap();
+    assert!(file.save().is_err());
+    assert!(fs::symlink_metadata(&path).unwrap().is_symlink());
+    assert_eq!(fs::read_to_string(other).unwrap(), "same");
+}

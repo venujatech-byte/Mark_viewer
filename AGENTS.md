@@ -69,3 +69,18 @@ The hosts still own CSP, resource resolution, and link navigation. The renderer
 example is `cargo run -p mdcore --example render -- FILE.md`. All CommonMark and
 untrusted-HTML tests passed at milestone 1 review; URL filtering uses one event
 path instead of reconstructing link/image fields.
+
+## File safety review
+`FileDocument` canonicalizes an existing regular file, records its original UTF-8
+bytes, and atomically persists a synced temporary file in the same directory.
+No-op saves do not touch timestamps. Saves compare disk bytes twice, preserve
+permissions, reject read-only files and Unix hard links, and retain unsaved text
+on errors. Symlinks opened initially resolve to their target; later replacement
+of that target by a symlink is rejected. No format or final newline is inserted.
+
+Limits: external programs do not share a lock, so a writer racing the final
+compare/rename can still conflict. Atomic replacement preserves permission bits,
+not extended attributes, ACLs, ownership, or inode identity. Network filesystems
+may offer weaker durability. A directory-sync error after rename means data may
+already be saved. The source editor applies one minimal replacement per input;
+new lines use the first existing newline style, untouched ranges keep their own.

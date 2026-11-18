@@ -28,7 +28,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Preserve permissions and safely resolve symlink targets.
 - [x] Test no-op saves and absent final newlines.
 - [x] Test save failures and concurrent edits.
-- [ ] Review and document file-safety guarantees and limits.
+- [x] Review and document file-safety guarantees and limits.
 
 ## 3. Desktop reading
 - [ ] Create the Tauri 2 workspace application.
