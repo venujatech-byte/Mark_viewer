@@ -36,3 +36,10 @@ button { font: inherit; font-size: 14px; padding: 8px 14px; border: 1px solid #c
 .hljs-number, .hljs-symbol { color: #8c4c12; }
 .hljs-comment { color: #66716a; font-style: italic; }
 .markdown img { max-width: 100%; height: auto; border-radius: 4px; }
+.markdown { min-width: 0; }
+.markdown pre { max-width: 100%; }
+.markdown table { display: block; width: max-content; max-width: 100%; overflow: auto; border-collapse: collapse; font-size: 14px; margin: 24px 0; }
+.markdown th, .markdown td { border: 1px solid #e3e9e6; padding: 10px 16px; text-align: left; }
+/* CSP blocks inline styles, so retain the parser's table alignment via selectors. */
+.markdown [style*="text-align: right"] { text-align: right; }
+.markdown [style*="text-align: center"] { text-align: center; }
