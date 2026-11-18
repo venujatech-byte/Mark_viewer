@@ -18,11 +18,14 @@ let revision = 0;
 async function openFile() {
   if (opening || saving) return;
   opening = true;
+  sourceInput.readOnly = true;
   document.querySelector('#welcome-open').disabled = true;
   openButton.disabled = true;
   status.textContent = 'Opening…';
   errorBox.textContent = '';
   try {
+    await editQueue;
+    if (isDirty() && !await window.__TAURI__.core.invoke('confirm_discard')) return;
     const opened = await window.__TAURI__.core.invoke('open_document');
     if (!opened) return;
     active = opened;
@@ -39,9 +42,10 @@ async function openFile() {
     errorBox.textContent = `Could not open file: ${error}`;
   } finally {
     opening = false;
+    sourceInput.readOnly = false;
     document.querySelector('#welcome-open').disabled = false;
     openButton.disabled = false;
-    status.textContent = active ? 'Read mode' : 'Open a markdown file to start reading.';
+    refreshStatus();
   }
 }
 
@@ -68,7 +72,6 @@ sourceInput.addEventListener('input', () => {
   if (!active) return;
   const value = sourceInput.value;
   const current = ++revision;
-  openButton.disabled = isDirty();
   refreshStatus();
   editQueue = editQueue.then(async () => {
     active.source = await window.__TAURI__.core.invoke('edit_source', { source: active.source, updated: value });
@@ -82,7 +85,7 @@ sourceInput.addEventListener('input', () => {
 });
 
 function refreshStatus() {
-  openButton.disabled = opening || saving || isDirty();
+  openButton.disabled = opening || saving;
   saveButton.disabled = !isDirty() || saving || opening;
   status.textContent = saving ? 'Saving…' : isDirty() ? 'Unsaved changes' : active ? 'Saved' : 'Open a markdown file to start reading.';
   document.title = active ? `${isDirty() ? '• ' : ''}${filename.textContent} — Mark` : 'Mark';
@@ -99,7 +102,6 @@ async function saveFile() {
     if (editorText(source) !== sourceInput.value) throw new Error('Preview could not synchronize. Your text is still in the source pane.');
     await window.__TAURI__.core.invoke('save_document', { path: active.path, source });
     savedEditor = editorText(source);
-    openButton.disabled = isDirty();
   } catch (error) {
     errorBox.textContent = `Could not save file: ${error}`;
   } finally {

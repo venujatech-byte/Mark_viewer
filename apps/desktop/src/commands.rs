@@ -69,6 +69,18 @@ pub async fn save_document(
     save_source(&state, &path, source)
 }
 
+#[tauri::command]
+pub async fn confirm_discard(app: tauri::AppHandle) -> bool {
+    app.dialog()
+        .message("This document has unsaved changes.")
+        .title("Discard changes?")
+        .buttons(tauri_plugin_dialog::MessageDialogButtons::OkCancelCustom(
+            "Discard changes".into(),
+            "Keep editing".into(),
+        ))
+        .blocking_show()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

@@ -133,3 +133,22 @@ test('edits made during a pending save remain dirty after the saved snapshot ret
   assert.equal(app.elements.get('#status').textContent, 'Unsaved changes');
   assert.equal(app.elements.get('#save').disabled, false);
 });
+
+test('declining discard keeps the unsaved document and avoids another picker', async () => {
+  let picks = 0;
+  const app = reader(async (command, data) => {
+    if (command === 'open_document') { picks++; return { path: '/a.md', source: 'Old', html: '<p>Old</p>' }; }
+    if (command === 'edit_source') return data.updated;
+    if (command === 'render_document') return data.source;
+    if (command === 'confirm_discard') return false;
+    throw new Error(command);
+  });
+  await app.open();
+  app.elements.get('#source').value = 'Keep these changes';
+  await app.elements.get('#source').input();
+  await app.open();
+  assert.equal(picks, 1);
+  assert.equal(app.elements.get('#source').value, 'Keep these changes');
+  assert.equal(app.elements.get('#source').readOnly, false);
+  assert.equal(app.elements.get('#status').textContent, 'Unsaved changes');
+});

@@ -10,7 +10,8 @@ fn main() {
             commands::open_document,
             commands::edit_source,
             commands::render_document,
-            commands::save_document
+            commands::save_document,
+            commands::confirm_discard
         ])
         .run(tauri::generate_context!())
         .expect("could not start Mark");
