@@ -71,3 +71,12 @@ fn metadata_is_separate_and_escaped() {
     assert!(html.ends_with("<h1>Body</h1>\n"));
     assert!(!html.contains("<hr"));
 }
+
+#[test]
+fn tables_render_header_alignment_and_cells() {
+    let html = render("| Name | Count |\n| :--- | ---: |\n| Skills | 2 |\n");
+    assert!(html.contains("<table>"));
+    assert!(html.contains("<thead>"));
+    assert!(html.contains("text-align: right"));
+    assert!(html.contains(">Skills</td>"));
+}

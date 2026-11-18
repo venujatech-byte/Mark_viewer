@@ -11,7 +11,7 @@ mod frontmatter;
 pub use document::Document;
 pub use frontmatter::split_frontmatter;
 
-use pulldown_cmark::{Event, Parser, Tag, html};
+use pulldown_cmark::{Event, Options, Parser, Tag, html};
 
 /// Render CommonMark to an HTML fragment without changing the source.
 ///
@@ -29,7 +29,7 @@ pub fn render(source: &str) -> String {
         html::push_html(&mut output, [Event::Text(metadata.into())].into_iter());
         output.push_str("</pre></details>\n");
     }
-    let events = Parser::new(body).map(|event| match event {
+    let events = Parser::new_ext(body, Options::ENABLE_TABLES).map(|event| match event {
         Event::Html(text) | Event::InlineHtml(text) => Event::Text(text),
         Event::Start(mut tag) => {
             match &mut tag {

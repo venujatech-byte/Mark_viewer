@@ -55,7 +55,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Review and smoke-test the full desktop edit cycle.
 
 ## 5. Markdown rendering polish
-- [ ] Enable and test tables.
+- [x] Enable and test tables.
 - [ ] Enable and test task lists.
 - [ ] Enable and test footnotes.
 - [ ] Enable and test strikethrough.
