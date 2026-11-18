@@ -108,7 +108,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 
 ## 9. Documentation and packaging
 - [x] Write README setup and desktop usage.
-- [ ] Document markdown and frontmatter behavior.
+- [x] Document markdown and frontmatter behavior.
 - [ ] Document save safety and conflict recovery.
 - [ ] Document desktop packaging prerequisites and commands.
 - [ ] Document VS Code installation and editor selection.
