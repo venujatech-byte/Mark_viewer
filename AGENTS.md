@@ -101,3 +101,10 @@ and tauri-driver 2.1.0 (verified from crates.io), installed separately as a test
 tool. Pass `--driver PATH` or place it on PATH. This checks native startup and
 controls, while Rust tests cover selected-file loading. It does not automate the
 operating system's file picker. Native startup and a screenshot passed on Fedora.
+
+## Desktop reader review
+The only file-opening command launches a native picker; no arbitrary read/write
+path is accepted from the frontend. Capabilities apply only to the local main
+window. Dialog filesystem permissions are not exposed to web content. Opening
+is serialized in the frontend, and backend state changes only after a successful
+read. The reader review added a test against simultaneous picker requests.

@@ -48,3 +48,15 @@ test('a failed open preserves the active document and permits retry', async () =
   await app.open();
   assert.equal(app.elements.get('#error').textContent, '');
 });
+
+test('only one native picker may be opened at a time', async () => {
+  let resolve;
+  let calls = 0;
+  const app = reader(() => { calls++; return new Promise(done => { resolve = done; }); });
+  const pending = app.open();
+  await app.open();
+  assert.equal(calls, 1);
+  resolve(null);
+  await pending;
+  assert.equal(app.elements.get('#welcome-open').disabled, false);
+});

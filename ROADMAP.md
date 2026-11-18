@@ -40,7 +40,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Show useful open errors and cancellation behavior.
 - [x] Add a first-run open-file screen.
 - [x] Build and smoke-test the desktop reader.
-- [ ] Review desktop command boundaries.
+- [x] Review desktop command boundaries.
 
 ## 4. Desktop editing
 - [ ] Add source and rendered mode controls.
