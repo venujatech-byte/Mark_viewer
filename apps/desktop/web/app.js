@@ -91,7 +91,11 @@ function refreshStatus() {
   openButton.disabled = opening || saving;
   saveButton.disabled = !isDirty() || saving || opening;
   status.textContent = saving ? 'Saving…' : isDirty() ? 'Unsaved changes' : active ? 'Saved' : 'Open a markdown file to start reading.';
-  document.title = active ? `${isDirty() ? '• ' : ''}${filename.textContent} — Mark` : 'Mark';
+  const title = active ? `${isDirty() ? '• ' : ''}${filename.textContent} — Mark` : 'Mark';
+  if (document.title !== title) {
+    document.title = title;
+    appWindow.setTitle(title).catch(error => { errorBox.textContent = `Could not update window title: ${error}`; });
+  }
 }
 
 async function saveFile() {

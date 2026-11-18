@@ -79,3 +79,12 @@ body, button { font-family: var(--font); }
 .markdown a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
 .markdown input[type="checkbox"] { margin-inline-end: 6px; accent-color: var(--accent); }
 .footnote-definition { font-size: 14px; margin-top: 20px; }
+.toolbar { position: sticky; top: 0; z-index: 2; background: var(--ground); gap: 8px; }
+.brand { display: flex; align-items: center; gap: 8px; margin-right: 20px; white-space: nowrap; }
+.brand svg { color: var(--accent); }
+.toolbar h1 { min-width: 0; margin-right: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.toolbar button { flex-shrink: 0; }
+.file-mark { display: block; margin: 0 auto 24px; }
+button:disabled { cursor: default; color: var(--muted); border-color: var(--border); }
+button:not(:disabled):hover { border-color: var(--text); }
+button[aria-pressed="true"] { background: var(--inline-code); border-color: var(--text); }
