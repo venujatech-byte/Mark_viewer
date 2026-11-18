@@ -18,7 +18,7 @@ let closing = false;
 let closeGuardReady = false;
 sourceInput.readOnly = true;
 
-async function openFile() {
+async function openFile(relative = null) {
   if (opening || saving || closing) return;
   opening = true;
   sourceInput.readOnly = true;
@@ -29,7 +29,7 @@ async function openFile() {
   try {
     await editQueue;
     if (isDirty() && !await window.__TAURI__.core.invoke('confirm_discard')) return;
-    const opened = await window.__TAURI__.core.invoke('open_document');
+    const opened = await window.__TAURI__.core.invoke(relative ? 'open_relative' : 'open_document', relative ? { url: relative } : {});
     if (!opened) return;
     active = opened;
     sourceInput.value = editorText(active.source);
@@ -39,6 +39,7 @@ async function openFile() {
     filename.textContent = active.path.split(/[\\/]/).pop();
     filename.title = active.path;
     showPreview(active.html);
+    return true;
   } catch (error) {
     errorBox.textContent = `Could not open file: ${error}`;
   } finally {
@@ -49,9 +50,9 @@ async function openFile() {
   }
 }
 
-openButton.addEventListener('click', openFile);
+openButton.addEventListener('click', () => openFile());
 
-document.querySelector('#welcome-open').addEventListener('click', openFile);
+document.querySelector('#welcome-open').addEventListener('click', () => openFile());
 
 function toggleMode() {
   if (!active) return;
@@ -145,6 +146,15 @@ document.addEventListener('keydown', event => {
 
 function showPreview(html) {
   preview.innerHTML = html;
+  const ids = new Set([...preview.querySelectorAll('[id]')].map(node => node.id));
+  for (const heading of preview.querySelectorAll('h1,h2,h3,h4,h5,h6')) {
+    const base = heading.textContent.toLowerCase().trim().replace(/[^\p{L}\p{N}_\s-]/gu, '').replace(/\s+/g, '-') || 'section';
+    let id = base;
+    let suffix = 1;
+    while (ids.has(id)) id = `${base}-${suffix++}`;
+    heading.id = id;
+    ids.add(id);
+  }
   for (const code of preview.querySelectorAll('pre code')) {
     const language = code.className.match(/\blanguage-([\w-]+)/)?.[1];
     if (language && window.hljs?.getLanguage(language)) {
@@ -162,8 +172,10 @@ preview.addEventListener('click', async event => {
   try {
     if (url.startsWith('#')) {
       preview.querySelector(`#${CSS.escape(decodeURIComponent(url.slice(1)))}`)?.scrollIntoView();
-    } else {
+    } else if (/^(https?:|mailto:)/i.test(url)) {
       await window.__TAURI__.core.invoke('open_external', { url });
+    } else if (await openFile(url) && url.includes('#')) {
+      preview.querySelector(`#${CSS.escape(decodeURIComponent(url.split('#')[1]))}`)?.scrollIntoView();
     }
   } catch (error) {
     errorBox.textContent = `Could not open link: ${error}`;

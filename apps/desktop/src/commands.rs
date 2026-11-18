@@ -98,6 +98,38 @@ pub fn open_external(app: tauri::AppHandle, url: String) -> Result<(), String> {
         .map_err(|error| error.to_string())
 }
 
+fn local_path(document: &Path, link: &str) -> Result<std::path::PathBuf, String> {
+    if !mdcore::safe_url(link, true) {
+        return Err("unsupported local resource URL".into());
+    }
+    let base = tauri::Url::from_file_path(document).map_err(|_| "invalid document path")?;
+    let url = base.join(link).map_err(|error| error.to_string())?;
+    let path = url
+        .to_file_path()
+        .map_err(|_| "expected a local resource")?;
+    std::fs::canonicalize(path).map_err(|error| error.to_string())
+}
+
+#[tauri::command]
+pub fn open_relative(
+    state: tauri::State<'_, ActiveDocument>,
+    url: String,
+) -> Result<Option<OpenedDocument>, String> {
+    let path = {
+        let guard = state.lock().map_err(|error| error.to_string())?;
+        local_path(guard.as_ref().ok_or("no document is open")?.path(), &url)?
+    };
+    let extension = path
+        .extension()
+        .and_then(|ext| ext.to_str())
+        .unwrap_or("")
+        .to_ascii_lowercase();
+    if !matches!(extension.as_str(), "md" | "markdown" | "mdown") {
+        return Err("only markdown links can open in Mark".into());
+    }
+    read_document(&path, &state).map(Some)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -161,6 +193,26 @@ mod tests {
             "mailto:a@example.com",
         ] {
             assert!(external_url(url).is_ok());
+        }
+    }
+    #[test]
+    fn local_links_resolve_from_the_document_including_encoded_names() {
+        let path = Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../../crates/mdcore/tests/fixtures/AGENTS.md")
+            .canonicalize()
+            .unwrap();
+        assert!(
+            local_path(&path, "./SKILL%2Emd#release")
+                .unwrap()
+                .ends_with("SKILL.md")
+        );
+        for link in [
+            "https://example.com",
+            "file:///etc/passwd",
+            "//remote/path",
+            "javascript:alert(1)",
+        ] {
+            assert!(local_path(&path, link).is_err());
         }
     }
 }
