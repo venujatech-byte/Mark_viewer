@@ -13,6 +13,7 @@ async function openFile() {
     const opened = await window.__TAURI__.core.invoke('open_document');
     if (!opened) return;
     active = opened;
+    document.querySelector('#welcome').hidden = true;
     filename.textContent = active.path.split(/[\\/]/).pop();
     filename.title = active.path;
     preview.innerHTML = active.html;
@@ -27,3 +28,5 @@ async function openFile() {
 }
 
 openButton.addEventListener('click', openFile);
+
+document.querySelector('#welcome-open').addEventListener('click', openFile);

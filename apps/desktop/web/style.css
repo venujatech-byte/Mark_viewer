@@ -17,3 +17,10 @@ button { font: inherit; font-size: 14px; padding: 8px 14px; border: 1px solid #c
 .frontmatter pre { margin: 16px 0 0; font: 13px/1.6 ui-monospace, "SFMono-Regular", Consolas, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
 #error { color: #a22d38; font-size: 14px; }
 #error:empty { display: none; }
+.welcome { max-width: 520px; margin: 12vh auto; text-align: center; }
+.welcome[hidden] { display: none; }
+.file-mark { display: inline-block; font-size: 28px; font-weight: 650; color: #206857; margin-bottom: 16px; }
+.welcome h2 { font-size: 24px; font-weight: 600; letter-spacing: -0.03em; }
+.welcome p { color: #56615a; line-height: 1.7; }
+.welcome button { background: #202522; color: white; margin: 16px 0; }
+.welcome .welcome-note { font-size: 12px; }

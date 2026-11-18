@@ -16,6 +16,13 @@
   <main class="sheet">
     <p id="status" role="status">Open a markdown file to start reading.</p>
     <p id="error" role="alert"></p>
+    <section id="welcome" class="welcome" aria-labelledby="welcome-title">
+      <span class="file-mark" aria-hidden="true">M↓</span>
+      <h2 id="welcome-title">Your markdown, ready to read.</h2>
+      <p>Open a README, an agent's instructions, or the notes you're working on.</p>
+      <button id="welcome-open" type="button">Open a markdown file</button>
+      <p class="welcome-note">Local files. Original formatting kept intact.</p>
+    </section>
     <article id="preview" class="markdown" aria-label="Rendered markdown"></article>
   </main>
 </body>
