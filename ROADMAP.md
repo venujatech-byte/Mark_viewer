@@ -39,7 +39,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Display frontmatter without raw delimiters.
 - [x] Show useful open errors and cancellation behavior.
 - [x] Add a first-run open-file screen.
-- [ ] Build and smoke-test the desktop reader.
+- [x] Build and smoke-test the desktop reader.
 - [ ] Review desktop command boundaries.
 
 ## 4. Desktop editing

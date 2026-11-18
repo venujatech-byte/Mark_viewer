@@ -92,3 +92,12 @@ the instruction file itself, its metadata disclosure and source/preview pair are
 the signature. The main question is “What does this file say?” The rendered
 article gets the space; open/edit/save stay one click away. No sidebar or sample
 analytics are needed. The small native icon is generated from icons/mark.svg.
+
+## Desktop checks
+`node --test apps/desktop/tests/*.test.cjs` checks frontend open/cancel/error
+behavior without third-party dependencies. Native Linux startup is checked with
+`python3 scripts/desktop-smoke.py`; it needs WebKitWebDriver, a graphical session,
+and tauri-driver 2.1.0 (verified from crates.io), installed separately as a test
+tool. Pass `--driver PATH` or place it on PATH. This checks native startup and
+controls, while Rust tests cover selected-file loading. It does not automate the
+operating system's file picker. Native startup and a screenshot passed on Fedora.

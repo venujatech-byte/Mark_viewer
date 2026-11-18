@@ -6,3 +6,4 @@
 *.vsix
 .taste-skill/
 .DS_Store
+__pycache__/
