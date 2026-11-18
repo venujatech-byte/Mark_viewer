@@ -49,7 +49,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Preserve edits made while saving.
 - [x] Confirm before replacing an unsaved document.
 - [x] Guard window close with unsaved edits.
-- [ ] Add open, save, and toggle keyboard shortcuts.
+- [x] Add open, save, and toggle keyboard shortcuts.
 - [ ] Surface save conflicts without discarding edits.
 - [ ] Test frontend editing state transitions.
 - [ ] Review and smoke-test the full desktop edit cycle.

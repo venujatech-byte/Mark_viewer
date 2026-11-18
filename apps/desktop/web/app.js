@@ -136,3 +136,11 @@ appWindow.onCloseRequested(async event => {
   sourceInput.readOnly = true;
   errorBox.textContent = `Editing is unavailable because close protection failed: ${error}`;
 });
+
+document.addEventListener('keydown', event => {
+  if ((!event.ctrlKey && !event.metaKey) || event.altKey || event.isComposing) return;
+  const action = { o: openFile, s: saveFile, e: toggleMode }[event.key.toLowerCase()];
+  if (!action) return;
+  event.preventDefault();
+  return action();
+});

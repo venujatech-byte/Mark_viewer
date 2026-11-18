@@ -7,6 +7,7 @@ function reader(invoke) {
   const elements = new Map();
   const document = {
     title: 'Mark',
+    addEventListener(name, callback) { this[name] = callback; },
     querySelector(selector) {
       if (!elements.has(selector)) elements.set(selector, {
         textContent: '', innerHTML: '', disabled: false,
@@ -175,4 +176,14 @@ test('declining a native close keeps unsaved text and the window', async () => {
   assert.equal(prevented, true);
   assert.equal(app.destroyed(), false);
   assert.equal(app.elements.get('#source').value, 'Unsaved');
+});
+
+test('keyboard open and edit shortcuts prevent browser defaults', async () => {
+  const app = reader(async () => ({ path: '/a.md', source: 'A', html: '<p>A</p>' }));
+  let prevented = 0;
+  await app.document.keydown({ key: 'O', ctrlKey: true, preventDefault() { prevented++; } });
+  app.document.keydown({ key: 'e', metaKey: true, preventDefault() { prevented++; } });
+  assert.equal(prevented, 2);
+  assert.equal(app.elements.get('#source-pane').hidden, false);
+  app.document.keydown({ key: 'e', ctrlKey: false, metaKey: false, preventDefault() { throw new Error('ordinary typing must work'); } });
 });
