@@ -1,5 +1,8 @@
 //! Byte-preserving markdown documents and shared HTML rendering.
 
+mod document;
+pub use document::Document;
+
 use pulldown_cmark::{Parser, html};
 
 /// Render CommonMark to HTML without changing the source.
