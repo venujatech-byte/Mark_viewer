@@ -7,7 +7,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Create the Cargo workspace and mdcore library.
 - [x] Render CommonMark headings and paragraphs.
 - [x] Read UTF-8 files without changing their bytes.
-- [ ] Add realistic instruction-file fixtures.
+- [x] Add realistic instruction-file fixtures.
 - [ ] Test emphasis, lists, and blockquotes.
 - [ ] Test Unicode and empty documents.
 - [ ] Escape embedded HTML in rendered output.
