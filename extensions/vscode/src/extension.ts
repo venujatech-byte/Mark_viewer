@@ -7,6 +7,7 @@ import { isEditRequest, minimalEdit } from './edits';
 export const viewType = 'mark.reader';
 
 export function activate(context: vscode.ExtensionContext): void {
+  const applying = new Set<string>();
   const provider: vscode.CustomTextEditorProvider = {
     resolveCustomTextEditor(document, panel) {
       const media = vscode.Uri.joinPath(context.extensionUri, 'media');
@@ -17,18 +18,28 @@ export function activate(context: vscode.ExtensionContext): void {
       const template = readFileSync(vscode.Uri.joinPath(media, 'index.html').fsPath, 'utf8');
       const html = webviewHtml(template, csp, nonce, asset);
       const snapshot = () => ({ type: 'document', path: document.fileName, source: document.getText(), version: document.version, dirty: document.isDirty });
-      let applying = false;
+      const key = document.uri.toString();
+      let recovered = false;
       const messages = panel.webview.onDidReceiveMessage(async (message: unknown) => {
         if (message && typeof message === 'object' && 'type' in message && message.type === 'ready') {
           await panel.webview.postMessage(snapshot());
         } else if (message && typeof message === 'object' && 'type' in message && (message.type === 'undo' || message.type === 'redo')) {
           await vscode.commands.executeCommand(message.type);
+        } else if (message && typeof message === 'object' && 'type' in message && message.type === 'recover' && 'source' in message && typeof message.source === 'string' && !recovered) {
+          recovered = true;
+          try {
+            const recovery = await vscode.workspace.openTextDocument({ language: 'markdown', content: message.source });
+            await vscode.window.showTextDocument(recovery, { preview: false });
+          } catch (error) {
+            recovered = false;
+            void vscode.window.showErrorMessage(`Could not create a recovery document: ${error}. Copy your text before closing Mark.`);
+          }
         } else if (isEditRequest(message)) {
-          if (applying || message.version !== document.version) {
+          if (applying.has(key) || message.version !== document.version) {
             await panel.webview.postMessage({ ...snapshot(), type: 'editResult', id: message.id, accepted: false, error: 'The document changed elsewhere. Copy your unsent text before reopening.' });
             return;
           }
-          applying = true;
+          applying.add(key);
           try {
             const change = minimalEdit(document.getText(), message.source);
             let accepted = true;
@@ -40,7 +51,7 @@ export function activate(context: vscode.ExtensionContext): void {
             await panel.webview.postMessage({ ...snapshot(), type: 'editResult', id: message.id, accepted });
           } catch (error) {
             await panel.webview.postMessage({ ...snapshot(), type: 'editResult', id: message.id, accepted: false, error: String(error) });
-          } finally { applying = false; }
+          } finally { applying.delete(key); }
         }
       });
       const changed = vscode.workspace.onDidChangeTextDocument(event => {

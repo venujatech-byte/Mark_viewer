@@ -31,6 +31,7 @@ window.addEventListener('message', event => {
     if (!message.accepted) {
       blocked = true;
       source.readOnly = true;
+      vscode.postMessage({ type: 'recover', source: applyEditorText(raw, source.value) });
       status.textContent = 'Unsent changes';
       error.textContent = message.error || 'The edit was rejected. Copy your source text before reopening.';
       return;

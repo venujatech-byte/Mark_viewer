@@ -42,3 +42,32 @@ test('external changes and undo snapshots refresh the rendered and source views'
   app.receive(snapshot('First', 3));
   assert.equal(app.elements.get('#source').value, 'First');
 });
+
+
+test('rejected edits retain the latest queued input in a recovery document', async () => {
+  const app = await webview();
+  app.receive(snapshot('Original', 1));
+  const source = app.elements.get('#source');
+  source.value = 'First input'; source.input();
+  const request = app.messages.at(-1);
+  source.value = 'Latest unsent input'; source.input();
+  app.receive({ ...snapshot('External', 2), type: 'editResult', id: request.id, accepted: false });
+  assert.equal(source.value, 'Latest unsent input');
+  assert.equal(source.readOnly, true);
+  assert.equal(app.messages.at(-1).type, 'recover');
+  assert.equal(app.messages.at(-1).source, 'Latest unsent input');
+  app.receive(snapshot('External', 3));
+  assert.equal(source.value, 'Latest unsent input');
+});
+
+test('typing while an edit is pending serializes the latest input after acknowledgment', async () => {
+  const app = await webview();
+  app.receive(snapshot('Original', 1));
+  const source = app.elements.get('#source');
+  source.value = 'First'; source.input();
+  const request = app.messages.at(-1);
+  source.value = 'Second'; source.input();
+  app.receive({ ...snapshot('First', 2, true), type: 'editResult', id: request.id, accepted: true });
+  assert.equal(app.messages.at(-1).source, 'Second');
+  assert.equal(app.messages.at(-1).version, 2);
+});

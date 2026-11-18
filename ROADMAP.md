@@ -94,7 +94,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Render document content through mdcore WASM.
 - [x] Apply source edits through WorkspaceEdit.
 - [x] Synchronize undo, redo, and external changes.
-- [ ] Reject stale webview edits.
+- [x] Reject stale webview edits.
 - [ ] Preserve BOM and newline conventions.
 - [ ] Integrate native save and dirty tracking.
 - [ ] Constrain webview CSP and resource roots.
