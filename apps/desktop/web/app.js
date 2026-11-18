@@ -152,3 +152,20 @@ function showPreview(html) {
     }
   }
 }
+
+preview.addEventListener('click', async event => {
+  const link = event.target.closest('a');
+  if (!link) return;
+  event.preventDefault();
+  const url = link.getAttribute('href');
+  if (!url) return;
+  try {
+    if (url.startsWith('#')) {
+      preview.querySelector(`#${CSS.escape(decodeURIComponent(url.slice(1)))}`)?.scrollIntoView();
+    } else {
+      await window.__TAURI__.core.invoke('open_external', { url });
+    }
+  } catch (error) {
+    errorBox.textContent = `Could not open link: ${error}`;
+  }
+});

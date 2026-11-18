@@ -228,3 +228,18 @@ test('rapid inputs serialize and undoing to the saved source clears dirty state'
   assert.equal(app.elements.get('#save').disabled, true);
   assert.equal(app.elements.get('#status').textContent, 'Saved');
 });
+
+test('preview links delegate navigation to the host instead of replacing the webview', async () => {
+  let opened;
+  const app = reader(async (command, data) => {
+    assert.equal(command, 'open_external');
+    opened = data.url;
+  });
+  let prevented = false;
+  await app.elements.get('#preview').click({
+    target: { closest() { return { getAttribute() { return 'https://example.com/guide'; } }; } },
+    preventDefault() { prevented = true; },
+  });
+  assert.equal(prevented, true);
+  assert.equal(opened, 'https://example.com/guide');
+});

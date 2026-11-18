@@ -81,6 +81,23 @@ pub async fn confirm_discard(app: tauri::AppHandle) -> bool {
         .blocking_show()
 }
 
+fn external_url(url: &str) -> Result<tauri::Url, String> {
+    let parsed = tauri::Url::parse(url).map_err(|error| error.to_string())?;
+    if !mdcore::safe_url(url, false) || !matches!(parsed.scheme(), "https" | "http" | "mailto") {
+        return Err("unsupported external link".into());
+    }
+    Ok(parsed)
+}
+
+#[tauri::command]
+pub fn open_external(app: tauri::AppHandle, url: String) -> Result<(), String> {
+    use tauri_plugin_opener::OpenerExt;
+    let url = external_url(&url)?;
+    app.opener()
+        .open_url(url.as_str(), None::<&str>)
+        .map_err(|error| error.to_string())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -126,5 +143,24 @@ mod tests {
         std::fs::write(&path, "external changes").unwrap();
         assert!(save_source(&state, &opened.path, edited).is_err());
         assert_eq!(std::fs::read_to_string(&path).unwrap(), "external changes");
+    }
+    #[test]
+    fn external_navigation_rejects_active_and_local_schemes() {
+        for url in [
+            "javascript:alert(1)",
+            "file:///etc/passwd",
+            "data:text/html,bad",
+            "command:workbench.action",
+            "./README.md",
+        ] {
+            assert!(external_url(url).is_err());
+        }
+        for url in [
+            "https://example.com/a",
+            "http://localhost:8080",
+            "mailto:a@example.com",
+        ] {
+            assert!(external_url(url).is_ok());
+        }
     }
 }

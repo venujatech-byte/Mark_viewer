@@ -6,13 +6,15 @@ use tauri::Manager;
 fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_opener::init())
         .manage(commands::ActiveDocument::default())
         .invoke_handler(tauri::generate_handler![
             commands::open_document,
             commands::edit_source,
             commands::render_document,
             commands::save_document,
-            commands::confirm_discard
+            commands::confirm_discard,
+            commands::open_external
         ])
         .build(tauri::generate_context!())
         .expect("could not start Mark")
