@@ -1,4 +1,6 @@
-use std::{fs, io, ops::Range, path::Path};
+#[cfg(not(target_arch = "wasm32"))]
+use std::{fs, path::Path};
+use std::{io, ops::Range};
 
 /// A UTF-8 markdown source. Rendering never mutates this text.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -11,6 +13,7 @@ impl Document {
         Self { source }
     }
 
+    #[cfg(not(target_arch = "wasm32"))]
     pub fn read(path: impl AsRef<Path>) -> io::Result<Self> {
         fs::read_to_string(path).map(Self::new)
     }
@@ -46,6 +49,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(not(target_arch = "wasm32"))]
     fn missing_file_is_an_error() {
         assert!(Document::read("/does-not-exist/mark.md").is_err());
     }

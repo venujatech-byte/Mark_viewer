@@ -2106,6 +2106,7 @@ version = "0.1.0"
 dependencies = [
  "pulldown-cmark",
  "tempfile",
+ "wasm-bindgen",
 ]
 
 [[package]]

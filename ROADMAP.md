@@ -81,7 +81,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Review and simplify shared frontend assets.
 
 ## 7. WASM
-- [ ] Add optional wasm-bindgen exports without filesystem access.
+- [x] Add optional wasm-bindgen exports without filesystem access.
 - [ ] Build the mdcore browser WASM package.
 - [ ] Test native and WASM rendering parity.
 - [ ] Test WASM Unicode and frontmatter handling.

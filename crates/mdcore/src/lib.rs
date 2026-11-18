@@ -2,6 +2,8 @@
 
 mod document;
 mod edit;
+#[cfg(feature = "wasm")]
+mod wasm;
 pub use edit::{apply_editor_text, editor_source, minimal_edit};
 #[cfg(not(target_arch = "wasm32"))]
 mod file;
