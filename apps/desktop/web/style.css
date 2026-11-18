@@ -92,7 +92,6 @@ button[aria-pressed="true"] { background: var(--inline-code); border-color: var(
 .skip-link { position: fixed; top: 8px; left: 16px; z-index: 5; padding: 12px 16px; color: var(--text); background: var(--surface); transform: translateY(-160%); }
 .skip-link:focus { transform: none; }
 #preview:focus-visible { outline-offset: 12px; }
-button, summary { -webkit-tap-highlight-color: transparent; }
 @media (max-width: 900px) {
   .panes.editing { grid-template-columns: minmax(0, 1fr); }
   #source { min-height: 38vh; }
@@ -112,3 +111,13 @@ button, summary { -webkit-tap-highlight-color: transparent; }
 #error:not(:empty) { padding: 12px 16px; border-left: 3px solid var(--negative); overflow-wrap: anywhere; }
 .empty-document { color: var(--muted); padding: 32px 0; }
 #source::placeholder { color: var(--muted); opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+@media (forced-colors: active) {
+  :root { --ground: Canvas; --surface: Canvas; --text: CanvasText; --muted: CanvasText; --border: ButtonBorder; --control: ButtonBorder; --accent: LinkText; --negative: CanvasText; --inline-code: Canvas; --code: Canvas; --selection: Highlight; --syntax-keyword: CanvasText; --syntax-string: CanvasText; --syntax-title: CanvasText; --syntax-number: CanvasText; --syntax-comment: CanvasText; }
+  ::selection { color: HighlightText; }
+  .welcome button { background: ButtonFace; color: ButtonText; }
+  button:disabled { color: GrayText; }
+  :focus-visible { outline-color: Highlight; }
+}

@@ -75,7 +75,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Add accessible focus and semantic regions.
 - [x] Adapt edit panes to narrow windows.
 - [x] Add clear busy, empty, and error states.
-- [ ] Respect reduced motion and forced colors.
+- [x] Respect reduced motion and forced colors.
 - [ ] Verify keyboard-only operation.
 - [ ] Inspect light and dark screenshots at three widths.
 - [ ] Review and simplify shared frontend assets.
