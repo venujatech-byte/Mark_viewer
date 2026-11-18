@@ -111,7 +111,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Document markdown and frontmatter behavior.
 - [x] Document save safety and conflict recovery.
 - [ ] Document desktop packaging prerequisites and commands.
-- [ ] Document VS Code installation and editor selection.
+- [x] Document VS Code installation and editor selection.
 - [ ] Add reproducible project verification commands.
 - [ ] Add continuous integration for Rust, frontend, and WASM.
 - [ ] Record platform support and remaining limitations.
