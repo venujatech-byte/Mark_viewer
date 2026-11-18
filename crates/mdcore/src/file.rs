@@ -40,7 +40,23 @@ impl FileDocument {
         if self.document.source() == self.saved {
             return Ok(());
         }
-        let metadata = fs::metadata(&self.path)?;
+        let metadata = fs::symlink_metadata(&self.path)?;
+        if !metadata.is_file() {
+            return Err(io::Error::new(
+                io::ErrorKind::InvalidInput,
+                "file was replaced with a non-regular file",
+            ));
+        }
+        #[cfg(unix)]
+        {
+            use std::os::unix::fs::MetadataExt;
+            if metadata.nlink() > 1 {
+                return Err(io::Error::new(
+                    io::ErrorKind::Unsupported,
+                    "atomic save would break hard links; edit an independent copy",
+                ));
+            }
+        }
         if metadata.permissions().readonly() {
             return Err(io::Error::new(
                 io::ErrorKind::PermissionDenied,

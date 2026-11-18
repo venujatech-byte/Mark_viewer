@@ -35,3 +35,32 @@ fn external_changes_are_never_overwritten() {
     assert_eq!(file.document.source(), "my changes");
     assert_eq!(fs::read_dir(directory.path()).unwrap().count(), 1);
 }
+
+#[cfg(unix)]
+#[test]
+fn symlink_target_and_permissions_survive_saving() {
+    use std::os::unix::fs::{PermissionsExt, symlink};
+    let directory = tempfile::tempdir().unwrap();
+    let target = directory.path().join("target.md");
+    let link = directory.path().join("link.md");
+    fs::write(&target, "old").unwrap();
+    fs::set_permissions(&target, fs::Permissions::from_mode(0o640)).unwrap();
+    symlink(&target, &link).unwrap();
+    let mut file = FileDocument::open(&link).unwrap();
+    file.document.edit(0..3, "new").unwrap();
+    file.save().unwrap();
+    assert!(fs::symlink_metadata(&link).unwrap().is_symlink());
+    assert_eq!(fs::read_to_string(&target).unwrap(), "new");
+    assert_eq!(
+        fs::metadata(&target).unwrap().permissions().mode() & 0o777,
+        0o640
+    );
+    let hardlink = directory.path().join("hard.md");
+    fs::hard_link(&target, hardlink).unwrap();
+    file.document.edit(0..3, "next").unwrap();
+    assert_eq!(
+        file.save().unwrap_err().kind(),
+        std::io::ErrorKind::Unsupported
+    );
+    assert_eq!(fs::read_to_string(&target).unwrap(), "new");
+}
