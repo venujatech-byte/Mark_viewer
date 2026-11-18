@@ -1,6 +1,8 @@
 //! Byte-preserving markdown documents and shared HTML rendering.
 
 mod document;
+mod edit;
+pub use edit::minimal_edit;
 mod frontmatter;
 pub use document::Document;
 pub use frontmatter::split_frontmatter;

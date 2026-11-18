@@ -21,7 +21,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Test BOM, CRLF, empty, and unterminated frontmatter.
 - [x] Apply validated UTF-8 byte-range edits.
 - [x] Test invalid and multibyte edit boundaries.
-- [ ] Translate source-editor changes into a minimal edit.
+- [x] Translate source-editor changes into a minimal edit.
 - [ ] Preserve original newlines through source-editor normalization.
 - [ ] Save files through an atomic replacement.
 - [ ] Refuse saves when the file has changed externally.
