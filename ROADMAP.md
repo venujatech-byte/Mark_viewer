@@ -85,7 +85,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Build the mdcore browser WASM package.
 - [x] Test native and WASM rendering parity.
 - [x] Test WASM Unicode and frontmatter handling.
-- [ ] Document the reproducible WASM build command.
+- [x] Document the reproducible WASM build command.
 
 ## 8. VS Code custom editor
 - [ ] Scaffold the TypeScript extension manifest and build.
