@@ -1,0 +1,20 @@
+{
+  "name": "mark-reader",
+  "displayName": "Mark — Markdown Reader",
+  "description": "Read rendered markdown and safely edit its source.",
+  "publisher": "mark-reader",
+  "version": "0.1.0",
+  "license": "MIT",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Other"],
+  "main": "./dist/extension.js",
+  "scripts": {
+    "build": "tsc -p .",
+    "lint": "tsc -p . --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2",
+    "@types/vscode": "1.146.0",
+    "@types/node": "26.6.6"
+  }
+}

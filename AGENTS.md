@@ -165,3 +165,11 @@ filesystem functions are compiled for this target.
 WASM Unicode tests also exposed CR-only YAML headers. The shared scanner now
 recognizes LF, CRLF, CR and mixed delimiters without rewriting metadata bytes.
 Native and WASM tests cover the same behavior, including BOM and multibyte edits.
+
+## VS Code dependencies
+Verified stable versions from npm before pinning:
+- typescript 7.0.2: compile and type-check the extension without a bundler.
+- @types/vscode 1.146.0: declarations for VS Code's Custom Text Editor API.
+- @types/node 26.6.6: declarations for standard extension-host Node modules.
+Use the installed VS Code CLI for integration tests; no Electron test-download
+package is needed. The extension has its own npm manifest and lockfile.

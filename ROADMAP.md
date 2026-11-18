@@ -88,7 +88,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Document the reproducible WASM build command.
 
 ## 8. VS Code custom editor
-- [ ] Scaffold the TypeScript extension manifest and build.
+- [x] Scaffold the TypeScript extension manifest and build.
 - [ ] Register a Custom Text Editor for markdown files.
 - [ ] Package shared rendering assets and WASM.
 - [ ] Render document content through mdcore WASM.
