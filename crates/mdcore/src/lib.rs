@@ -5,46 +5,25 @@ pub use document::Document;
 
 use pulldown_cmark::{Event, Parser, Tag, html};
 
-/// Render CommonMark to HTML without changing the source.
+/// Render CommonMark to an HTML fragment without changing the source.
+///
+/// Raw HTML is escaped and active URL schemes are removed. The host must still
+/// apply a content security policy and resolve relative resources safely.
+///
+/// ```
+/// assert_eq!(mdcore::render("**hello**"), "<p><strong>hello</strong></p>\n");
+/// ```
 pub fn render(source: &str) -> String {
     let mut output = String::new();
     let events = Parser::new(source).map(|event| match event {
         Event::Html(text) | Event::InlineHtml(text) => Event::Text(text),
-        Event::Start(Tag::Link {
-            link_type,
-            dest_url,
-            title,
-            id,
-        }) => {
-            let dest_url = if safe_url(&dest_url, false) {
-                dest_url
-            } else {
-                "".into()
-            };
-            Event::Start(Tag::Link {
-                link_type,
-                dest_url,
-                title,
-                id,
-            })
-        }
-        Event::Start(Tag::Image {
-            link_type,
-            dest_url,
-            title,
-            id,
-        }) => {
-            let dest_url = if safe_url(&dest_url, true) {
-                dest_url
-            } else {
-                "".into()
-            };
-            Event::Start(Tag::Image {
-                link_type,
-                dest_url,
-                title,
-                id,
-            })
+        Event::Start(mut tag) => {
+            match &mut tag {
+                Tag::Link { dest_url, .. } if !safe_url(dest_url, false) => *dest_url = "".into(),
+                Tag::Image { dest_url, .. } if !safe_url(dest_url, true) => *dest_url = "".into(),
+                _ => {}
+            }
+            Event::Start(tag)
         }
         other => other,
     });

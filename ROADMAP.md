@@ -13,7 +13,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Escape embedded HTML in rendered output.
 - [x] Reject unsafe link destinations.
 - [x] Add a renderer example for manual inspection.
-- [ ] Review core rendering and document its API.
+- [x] Review core rendering and document its API.
 
 ## 2. Frontmatter and safe editing
 - [ ] Detect YAML frontmatter while retaining its original bytes.

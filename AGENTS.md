@@ -62,3 +62,10 @@ Verified against crates.io on 2026-11-18 before use:
 - https://v2.tauri.app/security/capabilities/
 - https://code.visualstudio.com/api/extension-guides/custom-editors
 - https://rustwasm.github.io/docs/wasm-bindgen/
+
+## Core rendering review
+`render(&str)` returns a safe HTML fragment; `Document` retains UTF-8 source.
+The hosts still own CSP, resource resolution, and link navigation. The renderer
+example is `cargo run -p mdcore --example render -- FILE.md`. All CommonMark and
+untrusted-HTML tests passed at milestone 1 review; URL filtering uses one event
+path instead of reconstructing link/image fields.
