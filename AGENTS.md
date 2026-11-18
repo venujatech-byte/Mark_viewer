@@ -187,3 +187,8 @@ rejected; the latest unsent source opens as an untitled recovery document.
 VS Code panel state is per view; document edits are keyed by document URI so two
 views cannot submit concurrent source changes. Each view disposes its webview,
 document, save, and view-state listeners when closed.
+
+- @vscode/vsce 4.1.1: verified from npm on 2026-11-18; standard Microsoft
+  CLI for packaging installable VSIX files. Install globally for `npm run
+  package` in `extensions/vscode`; the environment registry was unavailable
+  during this run, so packaging could not be executed here.
