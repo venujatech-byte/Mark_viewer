@@ -11,6 +11,7 @@ function reader(invoke) {
     querySelector(selector) {
       if (!elements.has(selector)) elements.set(selector, {
         textContent: '', innerHTML: '', disabled: false,
+        querySelectorAll() { return []; },
         classList: { toggle() {} }, setAttribute() {}, focus() {},
         addEventListener(name, callback) { this[name] = callback; },
       });

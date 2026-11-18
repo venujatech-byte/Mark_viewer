@@ -38,7 +38,7 @@ async function openFile() {
     document.querySelector('#welcome').hidden = true;
     filename.textContent = active.path.split(/[\\/]/).pop();
     filename.title = active.path;
-    preview.innerHTML = active.html;
+    showPreview(active.html);
   } catch (error) {
     errorBox.textContent = `Could not open file: ${error}`;
   } finally {
@@ -77,7 +77,7 @@ sourceInput.addEventListener('input', () => {
     active.source = await window.__TAURI__.core.invoke('edit_source', { source: active.source, updated: value });
     if (current === revision) {
       const html = await window.__TAURI__.core.invoke('render_document', { source: active.source });
-      if (current === revision) preview.innerHTML = html;
+      if (current === revision) showPreview(html);
     }
   }).catch(error => {
     errorBox.textContent = `Could not update preview: ${error}`;
@@ -142,3 +142,13 @@ document.addEventListener('keydown', event => {
   event.preventDefault();
   return action();
 });
+
+function showPreview(html) {
+  preview.innerHTML = html;
+  for (const code of preview.querySelectorAll('pre code')) {
+    const language = code.className.match(/\blanguage-([\w-]+)/)?.[1];
+    if (language && window.hljs?.getLanguage(language)) {
+      code.innerHTML = window.hljs.highlight(code.textContent, { language }).value;
+    }
+  }
+}

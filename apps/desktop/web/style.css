@@ -30,3 +30,8 @@ button { font: inherit; font-size: 14px; padding: 8px 14px; border: 1px solid #c
 .markdown code { font: 0.875em/1.6 ui-monospace, "SFMono-Regular", Consolas, monospace; background: #f1f4f2; padding: 0.18em 0.35em; border-radius: 4px; }
 .markdown pre { padding: 20px 24px; background: #f4f6f5; border-radius: 6px; overflow: auto; }
 .markdown pre code { padding: 0; border-radius: 0; background: transparent; white-space: pre; }
+.hljs-keyword, .hljs-selector-tag, .hljs-literal { color: #9b2862; }
+.hljs-string, .hljs-attr { color: #216448; }
+.hljs-title, .hljs-built_in { color: #175da2; }
+.hljs-number, .hljs-symbol { color: #8c4c12; }
+.hljs-comment { color: #66716a; font-style: italic; }

@@ -1,0 +1,11 @@
+{
+  "name": "mark-workspace",
+  "private": true,
+  "scripts": {
+    "vendor": "node scripts/vendor.mjs",
+    "test": "node --test apps/desktop/tests/*.test.cjs"
+  },
+  "devDependencies": {
+    "@highlightjs/cdn-assets": "11.12.0"
+  }
+}

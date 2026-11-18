@@ -60,7 +60,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Enable and test footnotes.
 - [x] Enable and test strikethrough.
 - [x] Style fenced and inline code blocks.
-- [ ] Add syntax highlighting with an existing maintained library.
+- [x] Add syntax highlighting with an existing maintained library.
 - [ ] Open safe external links through the host.
 - [ ] Resolve local markdown links relative to the current file.
 - [ ] Resolve local images with restricted access.

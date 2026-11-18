@@ -120,3 +120,9 @@ at their respective boundaries. Quit requests route through the window close
 guard. Keyboard shortcuts are Ctrl/Command O, S, E. The review removed duplicate
 status updates and rejects stale preview responses. Desktop editing now works;
 WASM and extension work may start after rendering/UI polish.
+
+## Browser dependency
+- @highlightjs/cdn-assets 11.12.0: official prebuilt Highlight.js browser assets,
+  verified from npm before pinning; syntax highlighting without a UI framework,
+  bundler or runtime CDN. `npm ci && npm run vendor` copies the library and license
+  into the desktop assets, shared by both hosts. Unknown code languages stay plain.
