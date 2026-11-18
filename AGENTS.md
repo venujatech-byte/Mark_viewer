@@ -139,3 +139,12 @@ images are allowed by CSP. Blob URLs are revoked when previews change. Inline
 styles remain blocked; table alignment is applied through stylesheet selectors.
 Native tests cover malformed links, traversal, symlinks, size limits and HTML
 injection; browser-language rendering parity is checked in the WASM milestone.
+
+## Keyboard verification
+Native WebDriver verifies Tab order: skip link, Open, first-run Open, document;
+disabled Edit/Save are skipped. Ctrl/Command shortcuts, source focus and discard
+are covered by frontend tests. Under the current X11 automation session the
+window is inactive (`document.hasFocus() == false`), so native computed focus
+rings cannot be evaluated; declared rules are checked there and active focus is
+checked with Chromium during visual inspection. Do not remove focus styles to
+make an inactive-window test pass.

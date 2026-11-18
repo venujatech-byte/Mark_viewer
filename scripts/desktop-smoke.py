@@ -48,6 +48,24 @@ with subprocess.Popen([args.driver], env=environment) as driver:
         assert evaluate("return document.querySelector('#welcome-title').textContent") == "Your markdown, ready to read."
         assert evaluate("return typeof window.__TAURI__.core.invoke") == "function"
         assert evaluate("return document.querySelector('#open').disabled") is False
+        evaluate("document.activeElement.blur(); return true")
+        for expected in ["skip-link", "open", "welcome-open", "preview"]:
+            request("POST", f"/session/{session}/actions", {"actions": [{
+                "type": "key", "id": "keyboard", "actions": [
+                    {"type": "keyDown", "value": "\ue004"},
+                    {"type": "keyUp", "value": "\ue004"}
+                ]
+            }]})
+            actual = evaluate("return document.activeElement.id || document.activeElement.className")
+            assert actual == expected, (expected, actual)
+        focus = evaluate("return {id: document.activeElement.id, focused: document.activeElement.matches(':focus'), outline: getComputedStyle(document.activeElement).outlineStyle, hasFocus: document.hasFocus(), accent: getComputedStyle(document.documentElement).getPropertyValue('--accent'), sheets: [...document.styleSheets].map(s => ({href:s.href, focus: [...s.cssRules].filter(r => r.selectorText?.includes('focus')).map(r=>r.cssText)}))}")
+        if args.screenshot:
+            args.screenshot.write_bytes(base64.b64decode(request("GET", f"/session/{session}/screenshot")))
+        if focus["hasFocus"]:
+            assert focus["outline"] != "none", focus
+        else:
+            print("Native window is inactive; verifying declared focus rules. Active focus is checked in browser inspection.")
+            assert any("outline:" in rule for sheet in focus["sheets"] for rule in sheet["focus"]), focus
         source = "\ufeff---\r\nname: skill\r\n---\r\n# Old  "
         updated = "---\nname: skill\n---\n# New  "
         result = request("POST", f"/session/{session}/execute/async", {
@@ -61,7 +79,9 @@ with subprocess.Popen([args.driver], env=environment) as driver:
             args.screenshot.write_bytes(base64.b64decode(request("GET", f"/session/{session}/screenshot")))
         print("Native Tauri startup, close protection, UTF-8 editing and rendering IPC passed.")
     finally:
-        if session:
-            request("DELETE", f"/session/{session}")
-        driver.terminate()
-        driver.wait(timeout=10)
+        try:
+            if session:
+                request("DELETE", f"/session/{session}")
+        finally:
+            driver.terminate()
+            driver.wait(timeout=10)
