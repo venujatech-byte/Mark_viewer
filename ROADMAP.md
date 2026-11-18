@@ -83,7 +83,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 ## 7. WASM
 - [x] Add optional wasm-bindgen exports without filesystem access.
 - [x] Build the mdcore browser WASM package.
-- [ ] Test native and WASM rendering parity.
+- [x] Test native and WASM rendering parity.
 - [ ] Test WASM Unicode and frontmatter handling.
 - [ ] Document the reproducible WASM build command.
 

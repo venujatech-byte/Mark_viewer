@@ -4,7 +4,8 @@
   "scripts": {
     "vendor": "node scripts/vendor.mjs",
     "test": "node --test apps/desktop/tests/*.test.cjs",
-    "wasm": "bash scripts/build-wasm.sh"
+    "wasm": "bash scripts/build-wasm.sh",
+    "test:wasm": "node crates/mdcore/tests/wasm.mjs"
   },
   "devDependencies": {
     "@highlightjs/cdn-assets": "11.12.0"
