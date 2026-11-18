@@ -126,3 +126,16 @@ WASM and extension work may start after rendering/UI polish.
   verified from npm before pinning; syntax highlighting without a UI framework,
   bundler or runtime CDN. `npm ci && npm run vendor` copies the library and license
   into the desktop assets, shared by both hosts. Unknown code languages stay plain.
+
+## Rendering review
+Both hosts share mdcore HTML and web/render.js (heading anchors and highlighting).
+Raw HTML stays escaped; headings, tables, task lists, footnotes and strikethrough
+are semantic HTML. The desktop intercepts navigation; the opener plugin's generic
+JS click hook is disabled so only validated commands open external URLs. Relative
+markdown links may navigate to another markdown file after discard confirmation.
+Images are restricted to the current document folder (including descendants),
+resolve symlinks before scope checks, and are bounded to 10 MiB. Remote HTTP(S)
+images are allowed by CSP. Blob URLs are revoked when previews change. Inline
+styles remain blocked; table alignment is applied through stylesheet selectors.
+Native tests cover malformed links, traversal, symlinks, size limits and HTML
+injection; browser-language rendering parity is checked in the WASM milestone.

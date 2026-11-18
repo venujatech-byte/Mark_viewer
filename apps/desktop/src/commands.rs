@@ -111,7 +111,7 @@ fn local_path(document: &Path, link: &str) -> Result<std::path::PathBuf, String>
 }
 
 #[tauri::command]
-pub fn open_relative(
+pub async fn open_relative(
     state: tauri::State<'_, ActiveDocument>,
     url: String,
 ) -> Result<Option<OpenedDocument>, String> {

@@ -20,7 +20,7 @@ function reader(invoke) {
   };
   let closeHandler;
   let destroyed = false;
-  vm.runInNewContext(readFileSync(`${__dirname}/../web/app.js`, 'utf8'), {
+  vm.runInNewContext(readFileSync(`${__dirname}/../web/render.js`, 'utf8') + '\n' + readFileSync(`${__dirname}/../web/app.js`, 'utf8'), {
     document, window: { __TAURI__: { core: { invoke }, window: { getCurrentWindow: () => ({
       onCloseRequested(handler) { closeHandler = handler; return Promise.resolve(); },
       async destroy() { destroyed = true; },

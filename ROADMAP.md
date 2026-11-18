@@ -66,7 +66,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Resolve local images with restricted access.
 - [x] Give tables and long code safe overflow behavior.
 - [x] Test malicious markdown and resource URLs.
-- [ ] Review rendering parity and security.
+- [x] Review rendering parity and security.
 
 ## 6. UI polish
 - [ ] Set the editor's typography and reading measure.
