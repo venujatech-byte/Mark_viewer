@@ -115,5 +115,5 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Add reproducible project verification commands.
 - [x] Add continuous integration for Rust, frontend, and WASM.
 - [x] Record platform support and remaining limitations.
-- [ ] Run final formatting, lint, tests, and packaging checks.
+- [x] Run final formatting, lint, and test checks.
 - [ ] Review the repository and verify 100+ meaningful commits.
