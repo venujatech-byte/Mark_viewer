@@ -8,7 +8,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Render CommonMark headings and paragraphs.
 - [x] Read UTF-8 files without changing their bytes.
 - [x] Add realistic instruction-file fixtures.
-- [ ] Test emphasis, lists, and blockquotes.
+- [x] Test emphasis, lists, and blockquotes.
 - [ ] Test Unicode and empty documents.
 - [ ] Escape embedded HTML in rendered output.
 - [ ] Reject unsafe link destinations.
