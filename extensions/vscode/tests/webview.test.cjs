@@ -71,3 +71,23 @@ test('typing while an edit is pending serializes the latest input after acknowle
   assert.equal(app.messages.at(-1).source, 'Second');
   assert.equal(app.messages.at(-1).version, 2);
 });
+
+
+test('save waits for the latest queued edit and failed saves keep the source', async () => {
+  const app = await webview();
+  app.receive(snapshot('Original', 1));
+  const source = app.elements.get('#source');
+  source.value = 'First'; source.input();
+  const first = app.messages.at(-1);
+  source.value = 'Second'; source.input();
+  app.elements.get('#save').click();
+  assert.equal(app.messages.at(-1).type, 'edit');
+  app.receive({ ...snapshot('First', 2, true), type: 'editResult', id: first.id, accepted: true });
+  const second = app.messages.at(-1);
+  assert.equal(second.source, 'Second');
+  app.receive({ ...snapshot('Second', 3, true), type: 'editResult', id: second.id, accepted: true });
+  assert.equal(app.messages.at(-1).type, 'save');
+  app.receive({ type: 'saveResult', saved: false, error: 'Disk conflict' });
+  assert.equal(source.value, 'Second');
+  assert.equal(app.elements.get('#error').textContent, 'Disk conflict');
+});

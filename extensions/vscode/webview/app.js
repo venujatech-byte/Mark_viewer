@@ -5,6 +5,8 @@ const source = document.querySelector('#source');
 const preview = document.querySelector('#preview');
 const status = document.querySelector('#status');
 const error = document.querySelector('#error');
+const save = document.querySelector('#save');
+let saveRequested = false;
 const toggle = document.querySelector('#toggle');
 let raw = '', version = 0, sequence = 0, pending = null, queued = false, blocked = false, loaded = false;
 source.readOnly = true;
@@ -18,13 +20,37 @@ function show(text) {
 function sendEdit() {
   if (pending !== null || blocked || !loaded) return;
   const updated = applyEditorText(raw, source.value);
-  if (updated === raw) return;
+  if (updated === raw) { flushSave(); return; }
   pending = ++sequence;
   vscode.postMessage({ type: 'edit', id: pending, version, source: updated });
 }
 
+function flushSave() {
+  if (saveRequested && pending === null && !blocked) {
+    saveRequested = false;
+    vscode.postMessage({ type: 'save' });
+  }
+}
+
+save.addEventListener('click', () => {
+  if (!loaded || blocked || source.readOnly) return;
+  saveRequested = true;
+  sendEdit();
+});
+
+window.addEventListener('keydown', event => {
+  if ((event.ctrlKey || event.metaKey) && !event.altKey && event.key.toLowerCase() === 's') {
+    event.preventDefault(); save.click();
+  }
+});
+
 window.addEventListener('message', event => {
   const message = event.data;
+  if (message.type === 'saveResult') {
+    if (!message.saved) error.textContent = message.error || 'Save was canceled or failed. Your edits remain in VS Code.';
+    if (pending === null && !blocked) status.textContent = message.saved && !message.dirty ? 'Saved' : 'Unsaved changes';
+    return;
+  }
   if (message.type === 'editResult') {
     if (message.id !== pending) return;
     pending = null;
@@ -40,6 +66,7 @@ window.addEventListener('message', event => {
     version = message.version;
     status.textContent = message.dirty ? 'Unsaved changes' : 'Saved';
     if (queued) { queued = false; sendEdit(); }
+    else flushSave();
     return;
   }
   if (message.type !== 'document' || pending !== null || blocked) return;
@@ -52,6 +79,7 @@ window.addEventListener('message', event => {
   source.value = editorSource(raw);
   source.setSelectionRange(Math.min(start, source.value.length), Math.min(end, source.value.length));
   source.readOnly = Boolean(message.editingError);
+  save.disabled = source.readOnly;
   error.textContent = message.editingError || '';
   show(raw);
   status.textContent = message.dirty ? 'Unsaved changes' : 'Saved';

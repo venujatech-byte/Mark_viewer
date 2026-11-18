@@ -29,6 +29,14 @@ export function activate(context: vscode.ExtensionContext): void {
       const messages = panel.webview.onDidReceiveMessage(async (message: unknown) => {
         if (message && typeof message === 'object' && 'type' in message && message.type === 'ready') {
           await panel.webview.postMessage(snapshot());
+        } else if (message && typeof message === 'object' && 'type' in message && message.type === 'save') {
+          try {
+            if (safetyError()) throw new Error(safetyError());
+            const saved = await document.save();
+            await panel.webview.postMessage({ type: 'saveResult', saved, dirty: document.isDirty });
+          } catch (error) {
+            await panel.webview.postMessage({ type: 'saveResult', saved: false, error: String(error) });
+          }
         } else if (message && typeof message === 'object' && 'type' in message && (message.type === 'undo' || message.type === 'redo')) {
           await vscode.commands.executeCommand(message.type);
         } else if (message && typeof message === 'object' && 'type' in message && message.type === 'recover' && 'source' in message && typeof message.source === 'string' && !recovered) {
