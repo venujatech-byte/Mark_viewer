@@ -3,13 +3,29 @@
   "productName": "Mark",
   "version": "0.1.0",
   "identifier": "dev.mark.editor",
-  "build": { "frontendDist": "web" },
+  "build": {
+    "frontendDist": "web"
+  },
   "app": {
     "withGlobalTauri": true,
-    "windows": [{ "title": "Mark", "width": 1100, "height": 800 }],
+    "windows": [
+      {
+        "title": "Mark",
+        "width": 1100,
+        "height": 800,
+        "label": "main",
+        "minWidth": 360,
+        "minHeight": 480
+      }
+    ],
     "security": {
-      "csp": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src ipc: http://ipc.localhost; img-src 'self' https:; object-src 'none'; base-uri 'none'; frame-src 'none'"
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src ipc: http://ipc.localhost; img-src 'self' https:; object-src 'none'; base-uri 'none'; frame-src 'none'",
+      "capabilities": [
+        "main-window"
+      ]
     }
   },
-  "bundle": { "active": false }
+  "bundle": {
+    "active": false
+  }
 }

@@ -32,7 +32,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 
 ## 3. Desktop reading
 - [x] Create the Tauri 2 workspace application.
-- [ ] Configure a restricted desktop window and CSP.
+- [x] Configure a restricted desktop window and CSP.
 - [ ] Open files through the native picker.
 - [ ] Keep the active document in backend state.
 - [ ] Show rendered content in a plain frontend.
