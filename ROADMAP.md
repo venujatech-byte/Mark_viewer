@@ -101,7 +101,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Resolve relative images through webview URIs.
 - [x] Handle safe links through VS Code.
 - [x] Add extension open and toggle commands.
-- [ ] Dispose listeners and multiple editor instances safely.
+- [x] Dispose listeners and multiple editor instances safely.
 - [ ] Test extension message and edit validation.
 - [ ] Package and smoke-test the installable extension.
 - [ ] Review desktop and extension behavior together.

@@ -183,3 +183,7 @@ desktop app for byte-preserving edits to those files. Invalid encodings are also
 read-only. User-configured save participants (formatters, trailing-space/final-
 newline settings) remain VS Code's responsibility. Stale webview edits are
 rejected; the latest unsent source opens as an untitled recovery document.
+
+VS Code panel state is per view; document edits are keyed by document URI so two
+views cannot submit concurrent source changes. Each view disposes its webview,
+document, save, and view-state listeners when closed.
