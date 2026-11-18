@@ -16,7 +16,7 @@ let savedEditor = '';
 let revision = 0;
 
 async function openFile() {
-  if (opening) return;
+  if (opening || saving) return;
   opening = true;
   document.querySelector('#welcome-open').disabled = true;
   openButton.disabled = true;
@@ -82,6 +82,7 @@ sourceInput.addEventListener('input', () => {
 });
 
 function refreshStatus() {
+  openButton.disabled = opening || saving || isDirty();
   saveButton.disabled = !isDirty() || saving || opening;
   status.textContent = saving ? 'Saving…' : isDirty() ? 'Unsaved changes' : active ? 'Saved' : 'Open a markdown file to start reading.';
   document.title = active ? `${isDirty() ? '• ' : ''}${filename.textContent} — Mark` : 'Mark';

@@ -105,3 +105,31 @@ test('saving sends edited source and clears the dirty state', async () => {
   assert.equal(app.elements.get('#status').textContent, 'Saved');
   assert.equal(app.elements.get('#save').disabled, true);
 });
+
+test('edits made during a pending save remain dirty after the saved snapshot returns', async () => {
+  let finishSave;
+  let requested;
+  const app = reader(async (command, data) => {
+    if (command === 'open_document') return { path: '/a.md', source: '# Old', html: '<h1>Old</h1>' };
+    if (command === 'edit_source') return data.updated;
+    if (command === 'render_document') return data.source;
+    if (command === 'save_document') {
+      requested = data.source;
+      return new Promise(done => { finishSave = done; });
+    }
+    throw new Error(command);
+  });
+  await app.open();
+  app.elements.get('#source').value = '# First';
+  await app.elements.get('#source').input();
+  const pending = app.elements.get('#save').click();
+  await new Promise(setImmediate);
+  app.elements.get('#source').value = '# Second';
+  await app.elements.get('#source').input();
+  finishSave();
+  await pending;
+  assert.equal(requested, '# First');
+  assert.equal(app.elements.get('#source').value, '# Second');
+  assert.equal(app.elements.get('#status').textContent, 'Unsaved changes');
+  assert.equal(app.elements.get('#save').disabled, false);
+});

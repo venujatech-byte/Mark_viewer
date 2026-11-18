@@ -46,7 +46,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Add source and rendered mode controls.
 - [x] Render live previews while typing.
 - [x] Save through mdcore with visible dirty state.
-- [ ] Preserve edits made while saving.
+- [x] Preserve edits made while saving.
 - [ ] Confirm before replacing an unsaved document.
 - [ ] Guard window close with unsaved edits.
 - [ ] Add open, save, and toggle keyboard shortcuts.
