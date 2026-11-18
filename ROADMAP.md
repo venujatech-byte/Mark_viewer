@@ -57,7 +57,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 ## 5. Markdown rendering polish
 - [x] Enable and test tables.
 - [x] Enable and test task lists.
-- [ ] Enable and test footnotes.
+- [x] Enable and test footnotes.
 - [ ] Enable and test strikethrough.
 - [ ] Style fenced and inline code blocks.
 - [ ] Add syntax highlighting with an existing maintained library.

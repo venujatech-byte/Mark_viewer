@@ -89,3 +89,12 @@ fn task_lists_render_disabled_semantic_checkboxes() {
     assert_eq!(html.matches("checked=\"\"").count(), 1);
     assert!(!html.contains("[x]"));
 }
+
+#[test]
+fn footnotes_link_references_to_their_definitions() {
+    let html = render("A note[^safe].\n\n[^safe]: Supporting **evidence**.\n");
+    assert!(html.contains("href=\"#safe\""));
+    assert!(html.contains("id=\"safe\""));
+    assert!(html.contains("<strong>evidence</strong>"));
+    assert!(!html.contains("[^safe]"));
+}
