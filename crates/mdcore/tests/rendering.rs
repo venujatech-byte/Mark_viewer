@@ -38,3 +38,27 @@ fn raw_html_cannot_execute_or_create_host_controls() {
     assert!(!html.contains("<button>"));
     assert!(html.contains("&lt;script&gt;"));
 }
+
+#[test]
+fn unsafe_link_and_image_schemes_are_removed() {
+    for url in [
+        "javascript:alert",
+        "vbscript:msgbox",
+        "data:text/html,bad",
+        "file:///etc/passwd",
+        "//evil.test/x",
+    ] {
+        let html = render(&format!("[link]({url}) ![image]({url})"));
+        assert!(!html.contains(url), "{html}");
+    }
+    for url in [
+        "https://example.com",
+        "./guide.md",
+        "#heading",
+        "mailto:a@example.com",
+    ] {
+        assert!(render(&format!("[link]({url})")).contains(url));
+    }
+    assert!(!mdcore::safe_url("https:\\evil.test", false));
+    assert!(!mdcore::safe_url("java\nscript:alert", false));
+}

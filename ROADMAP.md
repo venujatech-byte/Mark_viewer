@@ -11,7 +11,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Test emphasis, lists, and blockquotes.
 - [x] Test Unicode and empty documents.
 - [x] Escape embedded HTML in rendered output.
-- [ ] Reject unsafe link destinations.
+- [x] Reject unsafe link destinations.
 - [ ] Add a renderer example for manual inspection.
 - [ ] Review core rendering and document its API.
 
