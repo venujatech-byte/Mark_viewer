@@ -21,6 +21,8 @@ export function activate(context: vscode.ExtensionContext): void {
       const messages = panel.webview.onDidReceiveMessage(async (message: unknown) => {
         if (message && typeof message === 'object' && 'type' in message && message.type === 'ready') {
           await panel.webview.postMessage(snapshot());
+        } else if (message && typeof message === 'object' && 'type' in message && (message.type === 'undo' || message.type === 'redo')) {
+          await vscode.commands.executeCommand(message.type);
         } else if (isEditRequest(message)) {
           if (applying || message.version !== document.version) {
             await panel.webview.postMessage({ ...snapshot(), type: 'editResult', id: message.id, accepted: false, error: 'The document changed elsewhere. Copy your unsent text before reopening.' });
@@ -41,7 +43,13 @@ export function activate(context: vscode.ExtensionContext): void {
           } finally { applying = false; }
         }
       });
-      panel.onDidDispose(() => messages.dispose());
+      const changed = vscode.workspace.onDidChangeTextDocument(event => {
+        if (event.document === document) void panel.webview.postMessage(snapshot());
+      });
+      const saved = vscode.workspace.onDidSaveTextDocument(savedDocument => {
+        if (savedDocument === document) void panel.webview.postMessage(snapshot());
+      });
+      panel.onDidDispose(() => { messages.dispose(); changed.dispose(); saved.dispose(); });
       panel.webview.html = html;
     },
   };

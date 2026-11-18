@@ -65,6 +65,13 @@ source.addEventListener('input', () => {
   sendEdit();
 });
 
+source.addEventListener('keydown', event => {
+  if ((event.ctrlKey || event.metaKey) && !event.altKey && ['z', 'y'].includes(event.key.toLowerCase())) {
+    event.preventDefault();
+    if (pending === null && !blocked) vscode.postMessage({ type: event.shiftKey || event.key.toLowerCase() === 'y' ? 'redo' : 'undo' });
+  }
+});
+
 toggle.addEventListener('click', () => {
   const pane = document.querySelector('#source-pane');
   pane.hidden = !pane.hidden;

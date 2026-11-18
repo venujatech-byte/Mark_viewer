@@ -93,7 +93,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Package shared rendering assets and WASM.
 - [x] Render document content through mdcore WASM.
 - [x] Apply source edits through WorkspaceEdit.
-- [ ] Synchronize undo, redo, and external changes.
+- [x] Synchronize undo, redo, and external changes.
 - [ ] Reject stale webview edits.
 - [ ] Preserve BOM and newline conventions.
 - [ ] Integrate native save and dirty tracking.
