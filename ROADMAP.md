@@ -20,7 +20,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Render metadata separately from the markdown body.
 - [x] Test BOM, CRLF, empty, and unterminated frontmatter.
 - [x] Apply validated UTF-8 byte-range edits.
-- [ ] Test invalid and multibyte edit boundaries.
+- [x] Test invalid and multibyte edit boundaries.
 - [ ] Translate source-editor changes into a minimal edit.
 - [ ] Preserve original newlines through source-editor normalization.
 - [ ] Save files through an atomic replacement.
