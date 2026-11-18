@@ -51,7 +51,8 @@ window.addEventListener('message', event => {
   document.querySelector('#filename').textContent = message.path.split(/[\\/]/).pop();
   source.value = editorSource(raw);
   source.setSelectionRange(Math.min(start, source.value.length), Math.min(end, source.value.length));
-  source.readOnly = false;
+  source.readOnly = Boolean(message.editingError);
+  error.textContent = message.editingError || '';
   show(raw);
   status.textContent = message.dirty ? 'Unsaved changes' : 'Saved';
   toggle.disabled = false;
@@ -59,7 +60,7 @@ window.addEventListener('message', event => {
 });
 
 source.addEventListener('input', () => {
-  if (blocked || !loaded) return;
+  if (blocked || !loaded || source.readOnly) return;
   queued = pending !== null;
   show(applyEditorText(raw, source.value));
   status.textContent = 'Updating document…';

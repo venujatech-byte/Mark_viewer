@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { readFileSync } from 'node:fs';
 import { randomBytes } from 'node:crypto';
 import { webviewHtml } from './html';
+import { editingError } from './encoding';
 import { isEditRequest, minimalEdit } from './edits';
 
 export const viewType = 'mark.reader';
@@ -17,7 +18,12 @@ export function activate(context: vscode.ExtensionContext): void {
       const csp = `default-src 'none'; script-src 'nonce-${nonce}' 'wasm-unsafe-eval'; style-src ${panel.webview.cspSource}; connect-src ${panel.webview.cspSource}; img-src ${panel.webview.cspSource} https: http: blob:; base-uri 'none'; object-src 'none'; frame-src 'none'; form-action 'none'`;
       const template = readFileSync(vscode.Uri.joinPath(media, 'index.html').fsPath, 'utf8');
       const html = webviewHtml(template, csp, nonce, asset);
-      const snapshot = () => ({ type: 'document', path: document.fileName, source: document.getText(), version: document.version, dirty: document.isDirty });
+      const safetyError = () => {
+        if (document.uri.scheme !== 'file') return 'Mark currently supports local UTF-8 files.';
+        try { return editingError(readFileSync(document.uri.fsPath), document.getText(), document.isDirty); }
+        catch (error) { return `Could not validate the original file: ${error}`; }
+      };
+      const snapshot = () => ({ type: 'document', path: document.fileName, source: document.getText(), version: document.version, dirty: document.isDirty, editingError: safetyError() });
       const key = document.uri.toString();
       let recovered = false;
       const messages = panel.webview.onDidReceiveMessage(async (message: unknown) => {
@@ -35,7 +41,7 @@ export function activate(context: vscode.ExtensionContext): void {
             void vscode.window.showErrorMessage(`Could not create a recovery document: ${error}. Copy your text before closing Mark.`);
           }
         } else if (isEditRequest(message)) {
-          if (applying.has(key) || message.version !== document.version) {
+          if (safetyError() || applying.has(key) || message.version !== document.version) {
             await panel.webview.postMessage({ ...snapshot(), type: 'editResult', id: message.id, accepted: false, error: 'The document changed elsewhere. Copy your unsent text before reopening.' });
             return;
           }

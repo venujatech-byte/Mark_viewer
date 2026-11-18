@@ -95,7 +95,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Apply source edits through WorkspaceEdit.
 - [x] Synchronize undo, redo, and external changes.
 - [x] Reject stale webview edits.
-- [ ] Preserve BOM and newline conventions.
+- [x] Preserve BOM and newline conventions.
 - [ ] Integrate native save and dirty tracking.
 - [ ] Constrain webview CSP and resource roots.
 - [ ] Resolve relative images through webview URIs.

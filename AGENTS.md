@@ -173,3 +173,13 @@ Verified stable versions from npm before pinning:
 - @types/node 26.6.6: declarations for standard extension-host Node modules.
 Use the installed VS Code CLI for integration tests; no Electron test-download
 package is needed. The extension has its own npm manifest and lockfile.
+
+## VS Code file safety
+Custom Text Editors use VS Code's TextDocument and native save/undo/conflict
+handling. The model excludes the UTF-8 BOM; never insert it as document text.
+Mark validates original UTF-8 bytes and allows uniform LF/CRLF. Mixed and CR-only
+newlines are read-only in the extension because VS Code normalizes them; use the
+desktop app for byte-preserving edits to those files. Invalid encodings are also
+read-only. User-configured save participants (formatters, trailing-space/final-
+newline settings) remain VS Code's responsibility. Stale webview edits are
+rejected; the latest unsent source opens as an untitled recovery document.
