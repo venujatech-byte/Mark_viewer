@@ -48,7 +48,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Save through mdcore with visible dirty state.
 - [x] Preserve edits made while saving.
 - [x] Confirm before replacing an unsaved document.
-- [ ] Guard window close with unsaved edits.
+- [x] Guard window close with unsaved edits.
 - [ ] Add open, save, and toggle keyboard shortcuts.
 - [ ] Surface save conflicts without discarding edits.
 - [ ] Test frontend editing state transitions.

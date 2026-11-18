@@ -1,6 +1,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 mod commands;
+use tauri::Manager;
 
 fn main() {
     tauri::Builder::default()
@@ -13,6 +14,16 @@ fn main() {
             commands::save_document,
             commands::confirm_discard
         ])
-        .run(tauri::generate_context!())
-        .expect("could not start Mark");
+        .build(tauri::generate_context!())
+        .expect("could not start Mark")
+        .run(|app, event| {
+            if let tauri::RunEvent::ExitRequested { api, .. } = event
+                && let Some(window) = app.get_webview_window("main")
+            {
+                api.prevent_exit();
+                if let Err(error) = window.close() {
+                    eprintln!("could not request a safe close: {error}");
+                }
+            }
+        });
 }

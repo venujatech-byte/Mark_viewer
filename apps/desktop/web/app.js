@@ -14,9 +14,12 @@ let opening = false;
 let editQueue = Promise.resolve();
 let savedEditor = '';
 let revision = 0;
+let closing = false;
+let closeGuardReady = false;
+sourceInput.readOnly = true;
 
 async function openFile() {
-  if (opening || saving) return;
+  if (opening || saving || closing) return;
   opening = true;
   sourceInput.readOnly = true;
   document.querySelector('#welcome-open').disabled = true;
@@ -42,7 +45,7 @@ async function openFile() {
     errorBox.textContent = `Could not open file: ${error}`;
   } finally {
     opening = false;
-    sourceInput.readOnly = false;
+    sourceInput.readOnly = !closeGuardReady;
     document.querySelector('#welcome-open').disabled = false;
     openButton.disabled = false;
     refreshStatus();
@@ -92,7 +95,7 @@ function refreshStatus() {
 }
 
 async function saveFile() {
-  if (!active || saving || opening) return;
+  if (!active || saving || opening || closing) return;
   saving = true;
   refreshStatus();
   errorBox.textContent = '';
@@ -110,3 +113,26 @@ async function saveFile() {
   }
 }
 saveButton.addEventListener('click', saveFile);
+
+const appWindow = window.__TAURI__.window.getCurrentWindow();
+appWindow.onCloseRequested(async event => {
+  if (!isDirty() && !saving && !opening) return;
+  event.preventDefault();
+  if (closing || saving || opening) return;
+  closing = true;
+  sourceInput.readOnly = true;
+  try {
+    if (await window.__TAURI__.core.invoke('confirm_discard')) await appWindow.destroy();
+  } catch (error) {
+    errorBox.textContent = `Could not close safely: ${error}`;
+  } finally {
+    closing = false;
+    sourceInput.readOnly = !closeGuardReady;
+  }
+}).then(() => {
+  closeGuardReady = true;
+  sourceInput.readOnly = opening || closing;
+}).catch(error => {
+  sourceInput.readOnly = true;
+  errorBox.textContent = `Editing is unavailable because close protection failed: ${error}`;
+});

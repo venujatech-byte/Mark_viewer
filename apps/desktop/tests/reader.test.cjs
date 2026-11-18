@@ -16,10 +16,16 @@ function reader(invoke) {
       return elements.get(selector);
     },
   };
+  let closeHandler;
+  let destroyed = false;
   vm.runInNewContext(readFileSync(`${__dirname}/../web/app.js`, 'utf8'), {
-    document, window: { __TAURI__: { core: { invoke } } },
+    document, window: { __TAURI__: { core: { invoke }, window: { getCurrentWindow: () => ({
+      onCloseRequested(handler) { closeHandler = handler; return Promise.resolve(); },
+      async destroy() { destroyed = true; },
+    }) } } },
   });
-  return { document, elements, open: () => elements.get('#open').click() };
+  return { document, elements, open: () => elements.get('#open').click(),
+    close: event => closeHandler(event), destroyed: () => destroyed };
 }
 
 test('opening renders a document and cancellation preserves it', async () => {
@@ -151,4 +157,22 @@ test('declining discard keeps the unsaved document and avoids another picker', a
   assert.equal(app.elements.get('#source').value, 'Keep these changes');
   assert.equal(app.elements.get('#source').readOnly, false);
   assert.equal(app.elements.get('#status').textContent, 'Unsaved changes');
+});
+
+test('declining a native close keeps unsaved text and the window', async () => {
+  const app = reader(async (command, data) => {
+    if (command === 'open_document') return { path: '/a.md', source: 'Old', html: '<p>Old</p>' };
+    if (command === 'edit_source') return data.updated;
+    if (command === 'render_document') return data.source;
+    if (command === 'confirm_discard') return false;
+    throw new Error(command);
+  });
+  await app.open();
+  app.elements.get('#source').value = 'Unsaved';
+  await app.elements.get('#source').input();
+  let prevented = false;
+  await app.close({ preventDefault() { prevented = true; } });
+  assert.equal(prevented, true);
+  assert.equal(app.destroyed(), false);
+  assert.equal(app.elements.get('#source').value, 'Unsaved');
 });
