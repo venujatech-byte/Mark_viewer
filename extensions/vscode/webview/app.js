@@ -12,7 +12,8 @@ let raw = '', version = 0, sequence = 0, pending = null, queued = false, blocked
 const images = new Map();
 let imageSequence = 0;
 source.readOnly = true;
-document.querySelector('#open').disabled = true;
+document.querySelector('#open').disabled = false;
+document.querySelector('#open').addEventListener('click', () => vscode.postMessage({ type: 'open' }));
 
 function show(text) {
   images.clear();
@@ -57,6 +58,7 @@ window.addEventListener('keydown', event => {
 
 window.addEventListener('message', event => {
   const message = event.data;
+  if (message.type === 'toggle') { toggle.click(); return; }
   if (message.type === 'imageResult') {
     const image = images.get(message.id);
     images.delete(message.id);

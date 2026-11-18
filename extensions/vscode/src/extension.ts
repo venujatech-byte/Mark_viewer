@@ -12,8 +12,12 @@ export const viewType = 'mark.reader';
 
 export function activate(context: vscode.ExtensionContext): void {
   const applying = new Set<string>();
+  const panels = new Set<vscode.WebviewPanel>();
+  let activePanel: vscode.WebviewPanel | undefined;
   const provider: vscode.CustomTextEditorProvider = {
     resolveCustomTextEditor(document, panel) {
+      panels.add(panel);
+      if (panel.active) activePanel = panel;
       const media = vscode.Uri.joinPath(context.extensionUri, 'media');
       const roots = [media];
       if (document.uri.scheme === 'file') roots.push(vscode.Uri.file(realpathSync(dirname(document.uri.fsPath))));
@@ -32,7 +36,10 @@ export function activate(context: vscode.ExtensionContext): void {
       const key = document.uri.toString();
       let recovered = false;
       const messages = panel.webview.onDidReceiveMessage(async (message: unknown) => {
-        if (message && typeof message === 'object' && 'type' in message && message.type === 'ready') {
+        if (message && typeof message === 'object' && 'type' in message && message.type === 'open') {
+          const files = await vscode.window.showOpenDialog({ canSelectMany: false, filters: { Markdown: ['md', 'markdown', 'mdown'] } });
+          if (files?.[0]) await vscode.commands.executeCommand('vscode.openWith', files[0], viewType);
+        } else if (message && typeof message === 'object' && 'type' in message && message.type === 'ready') {
           await panel.webview.postMessage(snapshot());
         } else if (message && typeof message === 'object' && 'type' in message && message.type === 'link' && 'url' in message && typeof message.url === 'string') {
           try {
@@ -93,11 +100,23 @@ export function activate(context: vscode.ExtensionContext): void {
       const saved = vscode.workspace.onDidSaveTextDocument(savedDocument => {
         if (savedDocument === document) void panel.webview.postMessage(snapshot());
       });
-      panel.onDidDispose(() => { messages.dispose(); changed.dispose(); saved.dispose(); });
+      const viewState = panel.onDidChangeViewState(event => { if (event.webviewPanel.active) activePanel = panel; });
+      panel.onDidDispose(() => {
+        panels.delete(panel);
+        if (activePanel === panel) activePanel = [...panels].find(candidate => candidate.active);
+        messages.dispose(); changed.dispose(); saved.dispose(); viewState.dispose();
+      });
       panel.webview.html = html;
     },
   };
-  context.subscriptions.push(vscode.window.registerCustomEditorProvider(viewType, provider, {
-    supportsMultipleEditorsPerDocument: true,
-  }));
+  context.subscriptions.push(
+    vscode.commands.registerCommand('mark.openDocument', async () => {
+      const files = await vscode.window.showOpenDialog({ canSelectMany: false, filters: { Markdown: ['md', 'markdown', 'mdown'] } });
+      if (files?.[0]) await vscode.commands.executeCommand('vscode.openWith', files[0], viewType);
+    }),
+    vscode.commands.registerCommand('mark.toggleEdit', () => { if (activePanel) void activePanel.webview.postMessage({ type: 'toggle' }); }),
+    vscode.window.registerCustomEditorProvider(viewType, provider, {
+      supportsMultipleEditorsPerDocument: true,
+    }),
+  );
 }

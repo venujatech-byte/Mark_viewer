@@ -92,3 +92,11 @@ test('save waits for the latest queued edit and failed saves keep the source', a
   assert.equal(source.value, 'Second');
   assert.equal(app.elements.get('#error').textContent, 'Disk conflict');
 });
+
+test('toolbar and editor commands request open and toggle through the host', async () => {
+  const app = await webview();
+  app.elements.get('#open').click();
+  assert.equal(app.messages.at(-1).type, 'open');
+  app.receive({ type: 'toggle' });
+  assert.equal(app.elements.get('#source-pane').hidden, true);
+});

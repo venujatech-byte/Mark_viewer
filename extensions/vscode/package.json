@@ -40,6 +40,29 @@
         ],
         "priority": "default"
       }
+    ],
+    "commands": [
+      {
+        "command": "mark.openDocument",
+        "title": "Mark: Open Markdown File"
+      },
+      {
+        "command": "mark.toggleEdit",
+        "title": "Mark: Toggle Source Editing"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "mark.openDocument",
+        "key": "ctrl+shift+o",
+        "mac": "cmd+shift+o"
+      },
+      {
+        "command": "mark.toggleEdit",
+        "key": "ctrl+e",
+        "mac": "cmd+e",
+        "when": "activeCustomEditorId == mark.reader"
+      }
     ]
   },
   "icon": "media/icon.png"
