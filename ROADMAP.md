@@ -10,7 +10,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Add realistic instruction-file fixtures.
 - [x] Test emphasis, lists, and blockquotes.
 - [x] Test Unicode and empty documents.
-- [ ] Escape embedded HTML in rendered output.
+- [x] Escape embedded HTML in rendered output.
 - [ ] Reject unsafe link destinations.
 - [ ] Add a renderer example for manual inspection.
 - [ ] Review core rendering and document its API.

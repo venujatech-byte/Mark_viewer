@@ -3,12 +3,16 @@
 mod document;
 pub use document::Document;
 
-use pulldown_cmark::{Parser, html};
+use pulldown_cmark::{Event, Parser, html};
 
 /// Render CommonMark to HTML without changing the source.
 pub fn render(source: &str) -> String {
     let mut output = String::new();
-    html::push_html(&mut output, Parser::new(source));
+    let events = Parser::new(source).map(|event| match event {
+        Event::Html(text) | Event::InlineHtml(text) => Event::Text(text),
+        other => other,
+    });
+    html::push_html(&mut output, events);
     output
 }
 

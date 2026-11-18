@@ -27,3 +27,14 @@ fn empty_and_unicode_documents_render_without_loss() {
     );
     assert_eq!(render("a & b < c"), "<p>a &amp; b &lt; c</p>\n");
 }
+
+#[test]
+fn raw_html_cannot_execute_or_create_host_controls() {
+    let html = render(
+        "<script>alert(1)</script>\n\n<img src=x onerror=alert(1)>\n\nHi <button>Save</button>",
+    );
+    assert!(!html.contains("<script>"));
+    assert!(!html.contains("<img"));
+    assert!(!html.contains("<button>"));
+    assert!(html.contains("&lt;script&gt;"));
+}
