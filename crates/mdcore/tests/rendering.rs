@@ -80,3 +80,12 @@ fn tables_render_header_alignment_and_cells() {
     assert!(html.contains("text-align: right"));
     assert!(html.contains(">Skills</td>"));
 }
+
+#[test]
+fn task_lists_render_disabled_semantic_checkboxes() {
+    let html = render("- [x] Read\n- [ ] Edit\n");
+    assert_eq!(html.matches("type=\"checkbox\"").count(), 2);
+    assert_eq!(html.matches("disabled=\"\"").count(), 2);
+    assert_eq!(html.matches("checked=\"\"").count(), 1);
+    assert!(!html.contains("[x]"));
+}

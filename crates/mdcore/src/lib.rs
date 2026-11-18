@@ -29,18 +29,25 @@ pub fn render(source: &str) -> String {
         html::push_html(&mut output, [Event::Text(metadata.into())].into_iter());
         output.push_str("</pre></details>\n");
     }
-    let events = Parser::new_ext(body, Options::ENABLE_TABLES).map(|event| match event {
-        Event::Html(text) | Event::InlineHtml(text) => Event::Text(text),
-        Event::Start(mut tag) => {
-            match &mut tag {
-                Tag::Link { dest_url, .. } if !safe_url(dest_url, false) => *dest_url = "".into(),
-                Tag::Image { dest_url, .. } if !safe_url(dest_url, true) => *dest_url = "".into(),
-                _ => {}
+    let events =
+        Parser::new_ext(body, Options::ENABLE_TABLES | Options::ENABLE_TASKLISTS).map(|event| {
+            match event {
+                Event::Html(text) | Event::InlineHtml(text) => Event::Text(text),
+                Event::Start(mut tag) => {
+                    match &mut tag {
+                        Tag::Link { dest_url, .. } if !safe_url(dest_url, false) => {
+                            *dest_url = "".into()
+                        }
+                        Tag::Image { dest_url, .. } if !safe_url(dest_url, true) => {
+                            *dest_url = "".into()
+                        }
+                        _ => {}
+                    }
+                    Event::Start(tag)
+                }
+                other => other,
             }
-            Event::Start(tag)
-        }
-        other => other,
-    });
+        });
     html::push_html(&mut output, events);
     output
 }
