@@ -91,7 +91,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Scaffold the TypeScript extension manifest and build.
 - [x] Register a Custom Text Editor for markdown files.
 - [x] Package shared rendering assets and WASM.
-- [ ] Render document content through mdcore WASM.
+- [x] Render document content through mdcore WASM.
 - [ ] Apply source edits through WorkspaceEdit.
 - [ ] Synchronize undo, redo, and external changes.
 - [ ] Reject stale webview edits.

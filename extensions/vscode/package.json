@@ -14,7 +14,8 @@
   "main": "./dist/extension.js",
   "scripts": {
     "build": "node scripts/assets.mjs && tsc -p .",
-    "lint": "tsc -p . --noEmit"
+    "lint": "tsc -p . --noEmit",
+    "test": "node --test tests/*.test.cjs"
   },
   "devDependencies": {
     "typescript": "7.0.2",
