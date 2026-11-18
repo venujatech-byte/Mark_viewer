@@ -62,3 +62,12 @@ fn unsafe_link_and_image_schemes_are_removed() {
     assert!(!mdcore::safe_url("https:\\evil.test", false));
     assert!(!mdcore::safe_url("java\nscript:alert", false));
 }
+
+#[test]
+fn metadata_is_separate_and_escaped() {
+    let html = render("---\nname: <script>bad</script>\n---\n# Body");
+    assert!(html.starts_with("<details class=\"frontmatter\">"));
+    assert!(html.contains("name: &lt;script&gt;bad&lt;/script&gt;"));
+    assert!(html.ends_with("<h1>Body</h1>\n"));
+    assert!(!html.contains("<hr"));
+}

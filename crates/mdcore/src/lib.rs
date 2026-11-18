@@ -17,7 +17,13 @@ use pulldown_cmark::{Event, Parser, Tag, html};
 /// ```
 pub fn render(source: &str) -> String {
     let mut output = String::new();
-    let events = Parser::new(source).map(|event| match event {
+    let (metadata, body) = split_frontmatter(source);
+    if let Some(metadata) = metadata {
+        output.push_str("<details class=\"frontmatter\"><summary>Frontmatter</summary><pre>");
+        html::push_html(&mut output, [Event::Text(metadata.into())].into_iter());
+        output.push_str("</pre></details>\n");
+    }
+    let events = Parser::new(body).map(|event| match event {
         Event::Html(text) | Event::InlineHtml(text) => Event::Text(text),
         Event::Start(mut tag) => {
             match &mut tag {

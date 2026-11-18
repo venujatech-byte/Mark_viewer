@@ -17,7 +17,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 
 ## 2. Frontmatter and safe editing
 - [x] Detect YAML frontmatter while retaining its original bytes.
-- [ ] Render metadata separately from the markdown body.
+- [x] Render metadata separately from the markdown body.
 - [ ] Test BOM, CRLF, empty, and unterminated frontmatter.
 - [ ] Apply validated UTF-8 byte-range edits.
 - [ ] Test invalid and multibyte edit boundaries.
