@@ -28,3 +28,17 @@ fn unclosed_or_noninitial_delimiters_are_not_frontmatter() {
     }
     assert_eq!(render("\u{feff}# Body"), "<h1>Body</h1>\n");
 }
+
+#[test]
+fn legacy_and_mixed_newlines_keep_metadata_boundaries_exact() {
+    for source in [
+        "---\ra: b\r---\r# Body",
+        "---\r\na: b\r---\n# Body",
+        "---\nkey: value\r\n...\r# Body",
+    ] {
+        let (metadata, body) = split_frontmatter(source);
+        assert!(metadata.is_some());
+        assert_eq!(body, "# Body");
+        assert!(source.contains(metadata.unwrap()));
+    }
+}

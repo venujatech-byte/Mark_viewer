@@ -2,20 +2,33 @@
 /// An unclosed header is ordinary markdown so incomplete edits remain visible.
 pub fn split_frontmatter(source: &str) -> (Option<&str>, &str) {
     let text = source.strip_prefix('\u{feff}').unwrap_or(source);
-    let mut lines = text.split_inclusive('\n');
-    let Some(first) = lines.next() else {
+    let Some(first_end) = text.find(['\r', '\n']) else {
         return (None, text);
     };
-    if first.trim_end_matches(['\r', '\n']) != "---" || !first.ends_with('\n') {
+    if &text[..first_end] != "---" {
         return (None, text);
     }
-    let start = first.len();
+    let start = first_end
+        + if text[first_end..].starts_with("\r\n") {
+            2
+        } else {
+            1
+        };
     let mut offset = start;
-    for line in lines {
-        if matches!(line.trim_end_matches(['\r', '\n']), "---" | "...") {
-            return (Some(&text[start..offset]), &text[offset + line.len()..]);
+    while offset < text.len() {
+        let end = text[offset..]
+            .find(['\r', '\n'])
+            .map_or(text.len(), |index| offset + index);
+        let next = end
+            + if text[end..].starts_with("\r\n") {
+                2
+            } else {
+                usize::from(end < text.len())
+            };
+        if matches!(&text[offset..end], "---" | "...") {
+            return (Some(&text[start..offset]), &text[next..]);
         }
-        offset += line.len();
+        offset = next;
     }
     (None, text)
 }

@@ -161,3 +161,7 @@ must match the library version. Install the wasm32-unknown-unknown Rust target,
 then run `npm run wasm` with wasm-bindgen on PATH. scripts/build-wasm.sh builds
 only mdcore and emits the ignored browser package in crates/mdcore/pkg. No
 filesystem functions are compiled for this target.
+
+WASM Unicode tests also exposed CR-only YAML headers. The shared scanner now
+recognizes LF, CRLF, CR and mixed delimiters without rewriting metadata bytes.
+Native and WASM tests cover the same behavior, including BOM and multibyte edits.

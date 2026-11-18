@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
-import init, { render } from '../pkg/mdcore.js';
+import init, { render, editorSource, applyEditorText } from '../pkg/mdcore.js';
 
 const binary = readFileSync(new URL('../pkg/mdcore_bg.wasm', import.meta.url));
 await init({ module_or_path: binary });
@@ -20,4 +20,15 @@ test('browser WASM renders the same bytes as native mdcore for every fixture', (
 test('the browser module has no WASI filesystem imports', () => {
   const imports = WebAssembly.Module.imports(new WebAssembly.Module(binary));
   assert.ok(imports.every(item => !item.module.includes('wasi')));
+});
+
+test('Unicode source edits preserve BOM, frontmatter and newline conventions', () => {
+  for (const newline of ['\n', '\r\n', '\r']) {
+    const original = '\ufeff' + ['---', '# Keep this comment', 'name: සිංහල 🦀', '---', '# Old  '].join(newline);
+    assert.equal(applyEditorText(original, editorSource(original)), original);
+    const edited = applyEditorText(original, editorSource(original).replace('Old', '日本語 🦀'));
+    assert.equal(edited, original.replace('Old', '日本語 🦀'));
+    assert.ok(render(edited).includes('<details class="frontmatter">'));
+    assert.ok(render(edited).includes('<h1>日本語 🦀</h1>'));
+  }
 });

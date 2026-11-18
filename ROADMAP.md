@@ -84,7 +84,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Add optional wasm-bindgen exports without filesystem access.
 - [x] Build the mdcore browser WASM package.
 - [x] Test native and WASM rendering parity.
-- [ ] Test WASM Unicode and frontmatter handling.
+- [x] Test WASM Unicode and frontmatter handling.
 - [ ] Document the reproducible WASM build command.
 
 ## 8. VS Code custom editor
