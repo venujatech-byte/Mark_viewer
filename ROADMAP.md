@@ -24,7 +24,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Translate source-editor changes into a minimal edit.
 - [x] Preserve original newlines through source-editor normalization.
 - [x] Save files through an atomic replacement.
-- [ ] Refuse saves when the file has changed externally.
+- [x] Refuse saves when the file has changed externally.
 - [ ] Preserve permissions and safely resolve symlink targets.
 - [ ] Test no-op saves and absent final newlines.
 - [ ] Test save failures and concurrent edits.
