@@ -1,7 +1,9 @@
 //! Byte-preserving markdown documents and shared HTML rendering.
 
 mod document;
+mod frontmatter;
 pub use document::Document;
+pub use frontmatter::split_frontmatter;
 
 use pulldown_cmark::{Event, Parser, Tag, html};
 

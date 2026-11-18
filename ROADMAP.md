@@ -16,7 +16,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Review core rendering and document its API.
 
 ## 2. Frontmatter and safe editing
-- [ ] Detect YAML frontmatter while retaining its original bytes.
+- [x] Detect YAML frontmatter while retaining its original bytes.
 - [ ] Render metadata separately from the markdown body.
 - [ ] Test BOM, CRLF, empty, and unterminated frontmatter.
 - [ ] Apply validated UTF-8 byte-range edits.
