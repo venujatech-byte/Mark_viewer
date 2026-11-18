@@ -4,7 +4,7 @@ Each checkbox is a small, reviewable commit. Complete milestones in order; use
 follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system.
 
 ## 1. Core reading and rendering
-- [ ] Create the Cargo workspace and mdcore library.
+- [x] Create the Cargo workspace and mdcore library.
 - [ ] Render CommonMark headings and paragraphs.
 - [ ] Read UTF-8 files without changing their bytes.
 - [ ] Add realistic instruction-file fixtures.
