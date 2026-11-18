@@ -31,7 +31,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Review and document file-safety guarantees and limits.
 
 ## 3. Desktop reading
-- [ ] Create the Tauri 2 workspace application.
+- [x] Create the Tauri 2 workspace application.
 - [ ] Configure a restricted desktop window and CSP.
 - [ ] Open files through the native picker.
 - [ ] Keep the active document in backend state.

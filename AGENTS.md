@@ -84,3 +84,11 @@ not extended attributes, ACLs, ownership, or inode identity. Network filesystems
 may offer weaker durability. A directory-sync error after rename means data may
 already be saved. The source editor applies one minimal replacement per input;
 new lines use the first existing newline style, untouched ranges keep their own.
+
+## Desktop design
+Framed sheet, seed 1270020764, chosen for long reading/editing sessions. System
+fonts are intentional. A pale green-grey frame and book-shaped M are Mark's face;
+the instruction file itself, its metadata disclosure and source/preview pair are
+the signature. The main question is “What does this file say?” The rendered
+article gets the space; open/edit/save stay one click away. No sidebar or sample
+analytics are needed. The small native icon is generated from icons/mark.svg.

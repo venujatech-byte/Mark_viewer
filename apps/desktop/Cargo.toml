@@ -1,0 +1,12 @@
+[package]
+name = "mark-desktop"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[build-dependencies]
+tauri-build = { version = "=2.7.5", features = [] }
+
+[dependencies]
+mdcore = { path = "../../crates/mdcore" }
+tauri = { version = "=2.12.6", features = [] }
