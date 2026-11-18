@@ -85,3 +85,47 @@ fn no_op_save_keeps_timestamps_and_bytes() {
         assert_eq!(fs::metadata(&path).unwrap().modified().unwrap(), before);
     }
 }
+
+#[test]
+fn failed_saves_keep_original_data_and_in_memory_edits() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("readonly.md");
+    fs::write(&path, "old").unwrap();
+    let mut file = FileDocument::open(&path).unwrap();
+    file.document.edit(0..3, "new").unwrap();
+    let mut permissions = fs::metadata(&path).unwrap().permissions();
+    permissions.set_readonly(true);
+    fs::set_permissions(&path, permissions).unwrap();
+    assert_eq!(
+        file.save().unwrap_err().kind(),
+        std::io::ErrorKind::PermissionDenied
+    );
+    assert_eq!(fs::read_to_string(&path).unwrap(), "old");
+    assert_eq!(file.document.source(), "new");
+    assert_eq!(fs::read_dir(directory.path()).unwrap().count(), 1);
+}
+
+#[test]
+fn sequential_writers_detect_conflicts_and_deleted_files() {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("shared.md");
+    fs::write(&path, "old").unwrap();
+    let mut first = FileDocument::open(&path).unwrap();
+    let mut second = FileDocument::open(&path).unwrap();
+    first.document.edit(0..3, "first").unwrap();
+    second.document.edit(0..3, "second").unwrap();
+    first.save().unwrap();
+    assert!(second.save().is_err());
+    assert_eq!(fs::read_to_string(&path).unwrap(), "first");
+    fs::remove_file(&path).unwrap();
+    assert_eq!(
+        second.save().unwrap_err().kind(),
+        std::io::ErrorKind::NotFound
+    );
+    assert!(!path.exists());
+    fs::write(&path, [0xff, 0xfe]).unwrap();
+    assert_eq!(
+        FileDocument::open(&path).unwrap_err().kind(),
+        std::io::ErrorKind::InvalidData
+    );
+}

@@ -27,7 +27,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Refuse saves when the file has changed externally.
 - [x] Preserve permissions and safely resolve symlink targets.
 - [x] Test no-op saves and absent final newlines.
-- [ ] Test save failures and concurrent edits.
+- [x] Test save failures and concurrent edits.
 - [ ] Review and document file-safety guarantees and limits.
 
 ## 3. Desktop reading
