@@ -187,3 +187,21 @@ test('keyboard open and edit shortcuts prevent browser defaults', async () => {
   assert.equal(app.elements.get('#source-pane').hidden, false);
   app.document.keydown({ key: 'e', ctrlKey: false, metaKey: false, preventDefault() { throw new Error('ordinary typing must work'); } });
 });
+
+test('a save conflict leaves source dirty and available for recovery', async () => {
+  const app = reader(async (command, data) => {
+    if (command === 'open_document') return { path: '/a.md', source: 'Old', html: '<p>Old</p>' };
+    if (command === 'edit_source') return data.updated;
+    if (command === 'render_document') return data.source;
+    if (command === 'save_document') throw new Error('file changed on disk');
+    throw new Error(command);
+  });
+  await app.open();
+  app.elements.get('#source').value = 'My changes';
+  await app.elements.get('#source').input();
+  await app.elements.get('#save').click();
+  assert.equal(app.elements.get('#source').value, 'My changes');
+  assert.equal(app.elements.get('#save').disabled, false);
+  assert.equal(app.elements.get('#status').textContent, 'Unsaved changes');
+  assert.match(app.elements.get('#error').textContent, /changed on disk.*copy them/);
+});

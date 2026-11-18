@@ -106,7 +106,7 @@ async function saveFile() {
     await window.__TAURI__.core.invoke('save_document', { path: active.path, source });
     savedEditor = editorText(source);
   } catch (error) {
-    errorBox.textContent = `Could not save file: ${error}`;
+    errorBox.textContent = `Could not save file: ${error}. Your edits remain in the source pane; copy them before reopening.`;
   } finally {
     saving = false;
     refreshStatus();

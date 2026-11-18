@@ -50,7 +50,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Confirm before replacing an unsaved document.
 - [x] Guard window close with unsaved edits.
 - [x] Add open, save, and toggle keyboard shortcuts.
-- [ ] Surface save conflicts without discarding edits.
+- [x] Surface save conflicts without discarding edits.
 - [ ] Test frontend editing state transitions.
 - [ ] Review and smoke-test the full desktop edit cycle.
 
