@@ -33,7 +33,8 @@ Once the workspace exists:
 - cargo fmt --all -- --check
 - cargo clippy --workspace --all-targets -- -D warnings
 - cargo test --workspace
-Add frontend, WASM and packaging commands here as they become available.
+Run `scripts/check.sh` for the complete Rust, frontend and WASM verification.
+The desktop WebDriver smoke test is separate because it needs a graphical session.
 
 ## Commits and work loop
 Read this file and ROADMAP.md, take the next unchecked task, implement the

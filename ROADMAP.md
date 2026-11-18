@@ -112,7 +112,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Document save safety and conflict recovery.
 - [x] Document desktop packaging prerequisites and commands.
 - [x] Document VS Code installation and editor selection.
-- [ ] Add reproducible project verification commands.
+- [x] Add reproducible project verification commands.
 - [ ] Add continuous integration for Rust, frontend, and WASM.
 - [ ] Record platform support and remaining limitations.
 - [ ] Run final formatting, lint, tests, and packaging checks.

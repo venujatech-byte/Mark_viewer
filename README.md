@@ -44,6 +44,8 @@ npm --prefix extensions/vscode run lint
 npm --prefix extensions/vscode test
 ```
 
+Run `scripts/check.sh` for the full verification suite.
+
 See [Markdown and frontmatter](docs/markdown.md), [save safety](docs/saving.md),
 [desktop packaging](docs/desktop.md), and [platform support](docs/platforms.md).
 The WASM build steps are in [docs/wasm.md](docs/wasm.md).
