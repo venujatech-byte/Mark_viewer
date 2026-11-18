@@ -121,3 +121,7 @@ button[aria-pressed="true"] { background: var(--inline-code); border-color: var(
   button:disabled { color: GrayText; }
   :focus-visible { outline-color: Highlight; }
 }
+.markdown li:has(> input[type="checkbox"]) { list-style: none; }
+.markdown li > input[type="checkbox"] { appearance: none; display: inline-grid; place-content: center; width: 14px; height: 14px; margin-left: -1.3em; border: 1px solid var(--muted); border-radius: 3px; vertical-align: -1px; }
+.markdown input[type="checkbox"]:checked { background: var(--accent); border-color: var(--accent); }
+.markdown input[type="checkbox"]:checked::before { content: ""; width: 6px; height: 3px; border-left: 2px solid var(--surface); border-bottom: 2px solid var(--surface); transform: translateY(-1px) rotate(-45deg); }

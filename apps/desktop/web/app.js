@@ -34,6 +34,8 @@ async function openFile(relative = null) {
     if (!opened) return;
     active = opened;
     sourceInput.value = editorText(active.source);
+    sourceInput.setSelectionRange(0, 0);
+    sourceInput.scrollTop = 0;
     savedEditor = sourceInput.value;
     toggleButton.disabled = false;
     document.querySelector('#welcome').hidden = true;

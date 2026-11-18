@@ -3,7 +3,7 @@ use std::path::Path;
 
 #[test]
 fn reads_realistic_instruction_files_exactly() {
-    for name in ["AGENTS.md", "SKILL.md", "README.md"] {
+    for name in ["AGENTS.md", "SKILL.md", "README.md", "FEATURES.md"] {
         let path = Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("tests/fixtures")
             .join(name);

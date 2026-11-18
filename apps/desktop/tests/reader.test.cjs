@@ -11,6 +11,7 @@ function reader(invoke) {
     querySelector(selector) {
       if (!elements.has(selector)) elements.set(selector, {
         textContent: '', innerHTML: '', disabled: false,
+        setSelectionRange(start, end) { this.selectionStart = start; this.selectionEnd = end; },
         querySelectorAll() { return []; },
         classList: { toggle() {} }, setAttribute() {}, focus() {},
         addEventListener(name, callback) { this[name] = callback; },
@@ -77,6 +78,7 @@ test('the source toggle reveals source without changing rendered content', async
   app.elements.get('#toggle').click();
   assert.equal(app.elements.get('#source-pane').hidden, false);
   assert.equal(app.elements.get('#source').value, '# Heading\n');
+  assert.equal(app.elements.get('#source').selectionStart, 0);
   assert.equal(app.elements.get('#preview').innerHTML, '<h1>Heading</h1>');
   app.elements.get('#toggle').click();
   assert.equal(app.elements.get('#source-pane').hidden, true);
