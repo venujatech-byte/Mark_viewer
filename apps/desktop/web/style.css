@@ -15,3 +15,5 @@ button { font: inherit; font-size: 14px; padding: 8px 14px; border: 1px solid #c
 .frontmatter { margin: 0 0 32px; padding: 12px 16px; border: 1px solid #e3e9e6; border-radius: 6px; color: #56615a; font-size: 13px; }
 .frontmatter summary { cursor: pointer; font-weight: 500; }
 .frontmatter pre { margin: 16px 0 0; font: 13px/1.6 ui-monospace, "SFMono-Regular", Consolas, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
+#error { color: #a22d38; font-size: 14px; }
+#error:empty { display: none; }

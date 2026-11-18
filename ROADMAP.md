@@ -37,7 +37,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Keep the active document in backend state.
 - [x] Show rendered content in a plain frontend.
 - [x] Display frontmatter without raw delimiters.
-- [ ] Show useful open errors and cancellation behavior.
+- [x] Show useful open errors and cancellation behavior.
 - [ ] Add a first-run open-file screen.
 - [ ] Build and smoke-test the desktop reader.
 - [ ] Review desktop command boundaries.

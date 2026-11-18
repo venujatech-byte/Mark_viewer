@@ -31,3 +31,20 @@ test('opening renders a document and cancellation preserves it', async () => {
   assert.equal(app.elements.get('#preview').innerHTML, '<h1>Instructions</h1>');
   assert.equal(app.elements.get('#open').disabled, false);
 });
+
+test('a failed open preserves the active document and permits retry', async () => {
+  let fail = false;
+  const app = reader(async () => {
+    if (fail) throw new Error('Permission denied');
+    return { path: '/notes/README.md', source: '# Keep', html: '<h1>Keep</h1>' };
+  });
+  await app.open();
+  fail = true;
+  await app.open();
+  assert.equal(app.elements.get('#preview').innerHTML, '<h1>Keep</h1>');
+  assert.match(app.elements.get('#error').textContent, /Permission denied/);
+  assert.equal(app.elements.get('#open').disabled, false);
+  fail = false;
+  await app.open();
+  assert.equal(app.elements.get('#error').textContent, '');
+});
