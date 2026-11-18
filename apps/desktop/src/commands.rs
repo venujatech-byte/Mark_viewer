@@ -105,4 +105,26 @@ mod tests {
         assert!(opened.html.contains("<h1>Release check</h1>"));
         assert!(opened.path.ends_with("SKILL.md"));
     }
+    #[test]
+    fn complete_edit_save_and_conflict_cycle_uses_the_selected_file() {
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("SKILL.md");
+        let original = "\u{feff}---\r\n# keep\r\nname: skill\r\n---\r\n# Old  ";
+        std::fs::write(&path, original).unwrap();
+        let state = ActiveDocument::default();
+        let opened = read_document(&path, &state).unwrap();
+        let edited = edit_source(
+            opened.source,
+            mdcore::editor_source(original).replace("Old", "New"),
+        );
+        assert!(render_document(edited.clone()).contains("<h1>New</h1>"));
+        save_source(&state, &opened.path, edited.clone()).unwrap();
+        assert_eq!(
+            std::fs::read_to_string(&path).unwrap(),
+            original.replace("Old", "New")
+        );
+        std::fs::write(&path, "external changes").unwrap();
+        assert!(save_source(&state, &opened.path, edited).is_err());
+        assert_eq!(std::fs::read_to_string(&path).unwrap(), "external changes");
+    }
 }

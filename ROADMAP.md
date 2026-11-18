@@ -52,7 +52,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Add open, save, and toggle keyboard shortcuts.
 - [x] Surface save conflicts without discarding edits.
 - [x] Test frontend editing state transitions.
-- [ ] Review and smoke-test the full desktop edit cycle.
+- [x] Review and smoke-test the full desktop edit cycle.
 
 ## 5. Markdown rendering polish
 - [ ] Enable and test tables.

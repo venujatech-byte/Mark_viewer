@@ -108,3 +108,15 @@ path is accepted from the frontend. Capabilities apply only to the local main
 window. Dialog filesystem permissions are not exposed to web content. Opening
 is serialized in the frontend, and backend state changes only after a successful
 read. The reader review added a test against simultaneous picker requests.
+
+## Desktop editing review
+Native startup, close-handler installation, edit_source and render_document IPC
+pass the WebDriver smoke test. The backend integration test runs open/edit/save
+and conflict recovery against a temporary real file, preserving BOM, CRLF, YAML
+comments and missing final newline. Twelve frontend tests cover typing, undo,
+save snapshots, failed saves, discard, close and shortcuts. The OS picker was
+inspected but is not automated; save integration and UI transitions are checked
+at their respective boundaries. Quit requests route through the window close
+guard. Keyboard shortcuts are Ctrl/Command O, S, E. The review removed duplicate
+status updates and rejects stale preview responses. Desktop editing now works;
+WASM and extension work may start after rendering/UI polish.

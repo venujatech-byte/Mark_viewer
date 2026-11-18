@@ -39,15 +39,12 @@ async function openFile() {
     filename.textContent = active.path.split(/[\\/]/).pop();
     filename.title = active.path;
     preview.innerHTML = active.html;
-    status.textContent = '';
-    document.title = `${filename.textContent} — Mark`;
   } catch (error) {
     errorBox.textContent = `Could not open file: ${error}`;
   } finally {
     opening = false;
     sourceInput.readOnly = !closeGuardReady;
     document.querySelector('#welcome-open').disabled = false;
-    openButton.disabled = false;
     refreshStatus();
   }
 }
@@ -79,7 +76,8 @@ sourceInput.addEventListener('input', () => {
   editQueue = editQueue.then(async () => {
     active.source = await window.__TAURI__.core.invoke('edit_source', { source: active.source, updated: value });
     if (current === revision) {
-      preview.innerHTML = await window.__TAURI__.core.invoke('render_document', { source: active.source });
+      const html = await window.__TAURI__.core.invoke('render_document', { source: active.source });
+      if (current === revision) preview.innerHTML = html;
     }
   }).catch(error => {
     errorBox.textContent = `Could not update preview: ${error}`;
