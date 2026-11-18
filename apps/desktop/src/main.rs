@@ -9,7 +9,8 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             commands::open_document,
             commands::edit_source,
-            commands::render_document
+            commands::render_document,
+            commands::save_document
         ])
         .run(tauri::generate_context!())
         .expect("could not start Mark");

@@ -5,6 +5,9 @@ const status = document.querySelector('#status');
 const errorBox = document.querySelector('#error');
 const toggleButton = document.querySelector('#toggle');
 const sourceInput = document.querySelector('#source');
+const saveButton = document.querySelector('#save');
+const editorText = source => source.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
+let saving = false;
 let editing = false;
 let active = null;
 let opening = false;
@@ -23,7 +26,7 @@ async function openFile() {
     const opened = await window.__TAURI__.core.invoke('open_document');
     if (!opened) return;
     active = opened;
-    sourceInput.value = active.source.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
+    sourceInput.value = editorText(active.source);
     savedEditor = sourceInput.value;
     toggleButton.disabled = false;
     document.querySelector('#welcome').hidden = true;
@@ -66,7 +69,7 @@ sourceInput.addEventListener('input', () => {
   const value = sourceInput.value;
   const current = ++revision;
   openButton.disabled = isDirty();
-  status.textContent = isDirty() ? 'Unsaved changes' : 'Saved';
+  refreshStatus();
   editQueue = editQueue.then(async () => {
     active.source = await window.__TAURI__.core.invoke('edit_source', { source: active.source, updated: value });
     if (current === revision) {
@@ -77,3 +80,30 @@ sourceInput.addEventListener('input', () => {
   });
   return editQueue;
 });
+
+function refreshStatus() {
+  saveButton.disabled = !isDirty() || saving || opening;
+  status.textContent = saving ? 'Saving…' : isDirty() ? 'Unsaved changes' : active ? 'Saved' : 'Open a markdown file to start reading.';
+  document.title = active ? `${isDirty() ? '• ' : ''}${filename.textContent} — Mark` : 'Mark';
+}
+
+async function saveFile() {
+  if (!active || saving || opening) return;
+  saving = true;
+  refreshStatus();
+  errorBox.textContent = '';
+  try {
+    await editQueue;
+    const source = active.source;
+    if (editorText(source) !== sourceInput.value) throw new Error('Preview could not synchronize. Your text is still in the source pane.');
+    await window.__TAURI__.core.invoke('save_document', { path: active.path, source });
+    savedEditor = editorText(source);
+    openButton.disabled = isDirty();
+  } catch (error) {
+    errorBox.textContent = `Could not save file: ${error}`;
+  } finally {
+    saving = false;
+    refreshStatus();
+  }
+}
+saveButton.addEventListener('click', saveFile);

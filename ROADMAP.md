@@ -45,7 +45,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 ## 4. Desktop editing
 - [x] Add source and rendered mode controls.
 - [x] Render live previews while typing.
-- [ ] Save through mdcore with visible dirty state.
+- [x] Save through mdcore with visible dirty state.
 - [ ] Preserve edits made while saving.
 - [ ] Confirm before replacing an unsaved document.
 - [ ] Guard window close with unsaved edits.

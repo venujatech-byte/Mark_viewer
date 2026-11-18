@@ -50,6 +50,25 @@ pub fn render_document(source: String) -> String {
     render(&source)
 }
 
+fn save_source(state: &ActiveDocument, path: &str, source: String) -> Result<(), String> {
+    let mut guard = state.lock().map_err(|error| error.to_string())?;
+    let file = guard.as_mut().ok_or("no document is open")?;
+    if file.path().to_string_lossy() != path {
+        return Err("the active document changed; reopen it before saving".into());
+    }
+    file.document = mdcore::Document::new(source);
+    file.save().map_err(|error| error.to_string())
+}
+
+#[tauri::command]
+pub async fn save_document(
+    state: tauri::State<'_, ActiveDocument>,
+    path: String,
+    source: String,
+) -> Result<(), String> {
+    save_source(&state, &path, source)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -61,6 +80,11 @@ mod tests {
         let state = ActiveDocument::default();
         let opened = read_document(&path, &state).unwrap();
         assert!(read_document(Path::new("/missing/mark.md"), &state).is_err());
+        assert_eq!(
+            state.lock().unwrap().as_ref().unwrap().document.source(),
+            opened.source
+        );
+        assert!(save_source(&state, "/wrong/path.md", "bad".into()).is_err());
         assert_eq!(
             state.lock().unwrap().as_ref().unwrap().document.source(),
             opened.source

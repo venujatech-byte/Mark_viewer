@@ -86,3 +86,22 @@ test('typing updates the rendered preview and retains dirty text', async () => {
   assert.equal(app.elements.get('#preview').innerHTML, '<h1>New</h1>');
   assert.equal(app.elements.get('#status').textContent, 'Unsaved changes');
 });
+
+test('saving sends edited source and clears the dirty state', async () => {
+  let saved;
+  const app = reader(async (command, data) => {
+    if (command === 'open_document') return { path: '/a.md', source: '# Old', html: '<h1>Old</h1>' };
+    if (command === 'edit_source') return data.updated;
+    if (command === 'render_document') return '<h1>New</h1>';
+    if (command === 'save_document') { saved = data; return; }
+    throw new Error(command);
+  });
+  await app.open();
+  app.elements.get('#source').value = '# New';
+  await app.elements.get('#source').input();
+  await app.elements.get('#save').click();
+  assert.equal(saved.path, '/a.md');
+  assert.equal(saved.source, '# New');
+  assert.equal(app.elements.get('#status').textContent, 'Saved');
+  assert.equal(app.elements.get('#save').disabled, true);
+});
