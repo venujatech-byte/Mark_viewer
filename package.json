@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "vendor": "node scripts/vendor.mjs",
-    "test": "node --test apps/desktop/tests/*.test.cjs"
+    "test": "node --test apps/desktop/tests/*.test.cjs",
+    "wasm": "bash scripts/build-wasm.sh"
   },
   "devDependencies": {
     "@highlightjs/cdn-assets": "11.12.0"

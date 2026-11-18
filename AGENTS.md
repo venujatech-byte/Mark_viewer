@@ -154,3 +154,10 @@ The UI review is in docs/ui-review.md. Both themes passed 1440/768/390px
 inspection and active keyboard checks in Chromium. The final review merged
 duplicate stylesheet declarations and reused font tokens; repeat visual checks
 passed afterward. No UI framework, custom font download, or animation is needed.
+
+## WASM build
+wasm-bindgen-cli 0.2.130 was verified from crates.io before installation; the CLI
+must match the library version. Install the wasm32-unknown-unknown Rust target,
+then run `npm run wasm` with wasm-bindgen on PATH. scripts/build-wasm.sh builds
+only mdcore and emits the ignored browser package in crates/mdcore/pkg. No
+filesystem functions are compiled for this target.
