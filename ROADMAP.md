@@ -104,7 +104,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Dispose listeners and multiple editor instances safely.
 - [x] Test extension message and edit validation.
 - [ ] Package and smoke-test the installable extension.
-- [ ] Review desktop and extension behavior together.
+- [x] Review desktop and extension behavior together.
 
 ## 9. Documentation and packaging
 - [x] Write README setup and desktop usage.

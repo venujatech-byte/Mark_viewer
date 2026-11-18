@@ -111,7 +111,7 @@ preview.addEventListener('click', event => {
   if (!link) return;
   event.preventDefault();
   if (link.getAttribute('href')?.startsWith('#')) {
-    preview.querySelector(link.getAttribute('href'))?.scrollIntoView();
+    try { preview.querySelector(`#${CSS.escape(decodeURIComponent(link.hash.slice(1)))}`)?.scrollIntoView(); } catch { /* Invalid fragments stay inert. */ }
     return;
   }
   vscode.postMessage({ type: 'link', url: link.getAttribute('href') });

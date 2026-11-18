@@ -11,6 +11,10 @@ import { isEditRequest, minimalEdit } from './edits';
 export const viewType = 'mark.reader';
 
 export function activate(context: vscode.ExtensionContext): void {
+  const openMarkdown = async () => {
+    const files = await vscode.window.showOpenDialog({ canSelectMany: false, filters: { Markdown: ['md', 'markdown', 'mdown'] } });
+    if (files?.[0]) await vscode.commands.executeCommand('vscode.openWith', files[0], viewType);
+  };
   const applying = new Set<string>();
   const panels = new Set<vscode.WebviewPanel>();
   let activePanel: vscode.WebviewPanel | undefined;
@@ -37,8 +41,7 @@ export function activate(context: vscode.ExtensionContext): void {
       let recovered = false;
       const messages = panel.webview.onDidReceiveMessage(async (message: unknown) => {
         if (message && typeof message === 'object' && 'type' in message && message.type === 'open') {
-          const files = await vscode.window.showOpenDialog({ canSelectMany: false, filters: { Markdown: ['md', 'markdown', 'mdown'] } });
-          if (files?.[0]) await vscode.commands.executeCommand('vscode.openWith', files[0], viewType);
+          await openMarkdown();
         } else if (message && typeof message === 'object' && 'type' in message && message.type === 'ready') {
           await panel.webview.postMessage(snapshot());
         } else if (message && typeof message === 'object' && 'type' in message && message.type === 'link' && 'url' in message && typeof message.url === 'string') {
@@ -110,10 +113,7 @@ export function activate(context: vscode.ExtensionContext): void {
     },
   };
   context.subscriptions.push(
-    vscode.commands.registerCommand('mark.openDocument', async () => {
-      const files = await vscode.window.showOpenDialog({ canSelectMany: false, filters: { Markdown: ['md', 'markdown', 'mdown'] } });
-      if (files?.[0]) await vscode.commands.executeCommand('vscode.openWith', files[0], viewType);
-    }),
+    vscode.commands.registerCommand('mark.openDocument', openMarkdown),
     vscode.commands.registerCommand('mark.toggleEdit', () => { if (activePanel) void activePanel.webview.postMessage({ type: 'toggle' }); }),
     vscode.window.registerCustomEditorProvider(viewType, provider, {
       supportsMultipleEditorsPerDocument: true,

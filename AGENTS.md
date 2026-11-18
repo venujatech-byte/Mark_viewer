@@ -193,3 +193,7 @@ document, save, and view-state listeners when closed.
   CLI for packaging installable VSIX files. Install globally for `npm run
   package` in `extensions/vscode`; the environment registry was unavailable
   during this run, so packaging could not be executed here.
+
+The VS Code manifest declares custom-editor and command activation events explicitly
+for compatibility across the supported VS Code range. The Fedora smoke run opened
+a fixture in the custom editor, rendered through WASM, edited it, and saved it.

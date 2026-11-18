@@ -67,5 +67,10 @@
       }
     ]
   },
-  "icon": "media/icon.png"
+  "icon": "media/icon.png",
+  "activationEvents": [
+    "onCustomEditor:mark.reader",
+    "onCommand:mark.openDocument",
+    "onCommand:mark.toggleEdit"
+  ]
 }
