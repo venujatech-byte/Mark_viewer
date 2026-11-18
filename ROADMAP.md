@@ -97,7 +97,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Reject stale webview edits.
 - [x] Preserve BOM and newline conventions.
 - [x] Integrate native save and dirty tracking.
-- [ ] Constrain webview CSP and resource roots.
+- [x] Constrain webview CSP and resource roots.
 - [ ] Resolve relative images through webview URIs.
 - [ ] Handle safe links through VS Code.
 - [ ] Add extension open and toggle commands.
