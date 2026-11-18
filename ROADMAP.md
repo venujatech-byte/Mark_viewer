@@ -9,7 +9,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Read UTF-8 files without changing their bytes.
 - [x] Add realistic instruction-file fixtures.
 - [x] Test emphasis, lists, and blockquotes.
-- [ ] Test Unicode and empty documents.
+- [x] Test Unicode and empty documents.
 - [ ] Escape embedded HTML in rendered output.
 - [ ] Reject unsafe link destinations.
 - [ ] Add a renderer example for manual inspection.
