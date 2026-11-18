@@ -90,7 +90,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 ## 8. VS Code custom editor
 - [x] Scaffold the TypeScript extension manifest and build.
 - [x] Register a Custom Text Editor for markdown files.
-- [ ] Package shared rendering assets and WASM.
+- [x] Package shared rendering assets and WASM.
 - [ ] Render document content through mdcore WASM.
 - [ ] Apply source edits through WorkspaceEdit.
 - [ ] Synchronize undo, redo, and external changes.
