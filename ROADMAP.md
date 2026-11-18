@@ -36,7 +36,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Open files through the native picker.
 - [x] Keep the active document in backend state.
 - [x] Show rendered content in a plain frontend.
-- [ ] Display frontmatter without raw delimiters.
+- [x] Display frontmatter without raw delimiters.
 - [ ] Show useful open errors and cancellation behavior.
 - [ ] Add a first-run open-file screen.
 - [ ] Build and smoke-test the desktop reader.

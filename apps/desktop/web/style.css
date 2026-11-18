@@ -12,3 +12,6 @@ button { font: inherit; font-size: 14px; padding: 8px 14px; border: 1px solid #c
 .sheet { margin: 0 8px 8px; padding: 24px; min-height: calc(100vh - 64px); background: white; border: 1px solid #e3e9e6; border-radius: 16px; }
 .markdown { max-width: 76ch; margin: 24px auto; line-height: 1.7; overflow-wrap: break-word; }
 #status { color: #56615a; font-size: 14px; }
+.frontmatter { margin: 0 0 32px; padding: 12px 16px; border: 1px solid #e3e9e6; border-radius: 6px; color: #56615a; font-size: 13px; }
+.frontmatter summary { cursor: pointer; font-weight: 500; }
+.frontmatter pre { margin: 16px 0 0; font: 13px/1.6 ui-monospace, "SFMono-Regular", Consolas, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
