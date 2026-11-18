@@ -19,7 +19,7 @@
     <button id="open" type="button" title="Ctrl/⌘ O" aria-keyshortcuts="Control+o Meta+o">Open file</button>
   </header>
   <main class="sheet">
-    <p id="status" role="status">Open a markdown file to start reading.</p>
+    <p id="status" role="status" aria-atomic="true">Open a markdown file to start reading.</p>
     <p id="error" role="alert"></p>
     <section id="welcome" class="welcome" aria-labelledby="welcome-title">
       <svg class="file-mark" width="52" height="52" aria-hidden="true"><use href="#mark-symbol"/></svg>
@@ -31,7 +31,7 @@
     <div id="panes" class="panes">
       <section id="source-pane" hidden>
         <label for="source">Markdown source</label>
-        <textarea id="source" spellcheck="false"></textarea>
+        <textarea id="source" spellcheck="false" placeholder="Write markdown here…"></textarea>
       </section>
       <article id="preview" class="markdown" tabindex="0" aria-label="Rendered markdown"></article>
     </div>

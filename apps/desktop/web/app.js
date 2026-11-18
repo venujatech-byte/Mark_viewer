@@ -25,7 +25,7 @@ async function openFile(relative = null) {
   sourceInput.readOnly = true;
   document.querySelector('#welcome-open').disabled = true;
   openButton.disabled = true;
-  status.textContent = 'Opening…';
+  refreshStatus();
   errorBox.textContent = '';
   try {
     await editQueue;
@@ -89,9 +89,10 @@ sourceInput.addEventListener('input', () => {
 });
 
 function refreshStatus() {
-  openButton.disabled = opening || saving;
-  saveButton.disabled = !isDirty() || saving || opening;
-  const message = saving ? 'Saving…' : isDirty() ? 'Unsaved changes' : active ? 'Saved' : 'Open a markdown file to start reading.';
+  document.querySelector('#panes').setAttribute('aria-busy', String(opening || saving));
+  openButton.disabled = opening || saving || closing;
+  saveButton.disabled = !isDirty() || saving || opening || closing;
+  const message = opening ? 'Opening…' : saving ? 'Saving…' : isDirty() ? 'Unsaved changes' : active ? 'Saved' : 'Open a markdown file to start reading.';
   if (status.textContent !== message) status.textContent = message;
   const title = active ? `${isDirty() ? '• ' : ''}${filename.textContent} — Mark` : 'Mark';
   if (document.title !== title) {
@@ -154,7 +155,7 @@ document.addEventListener('keydown', event => {
 function showPreview(html) {
   for (const url of imageUrls) URL.revokeObjectURL(url);
   imageUrls = [];
-  preview.innerHTML = html;
+  preview.innerHTML = html || '<p class="empty-document">This file is empty.</p>';
   for (const image of preview.querySelectorAll('img')) {
     image.loading = 'lazy';
     const url = image.getAttribute('src');

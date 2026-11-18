@@ -74,7 +74,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Polish toolbar and document identity.
 - [x] Add accessible focus and semantic regions.
 - [x] Adapt edit panes to narrow windows.
-- [ ] Add clear busy, empty, and error states.
+- [x] Add clear busy, empty, and error states.
 - [ ] Respect reduced motion and forced colors.
 - [ ] Verify keyboard-only operation.
 - [ ] Inspect light and dark screenshots at three widths.

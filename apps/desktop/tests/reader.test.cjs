@@ -244,3 +244,11 @@ test('preview links delegate navigation to the host instead of replacing the web
   assert.equal(prevented, true);
   assert.equal(opened, 'https://example.com/guide');
 });
+
+test('an empty document has a readable empty state without becoming dirty', async () => {
+  const app = reader(async () => ({ path: '/empty.md', source: '', html: '' }));
+  await app.open();
+  assert.match(app.elements.get('#preview').innerHTML, /This file is empty/);
+  assert.equal(app.elements.get('#source').value, '');
+  assert.equal(app.elements.get('#save').disabled, true);
+});
