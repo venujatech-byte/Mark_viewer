@@ -11,6 +11,7 @@
   <header class="toolbar">
     <span class="brand">Mark</span>
     <h1 id="filename">No document open</h1>
+    <button id="toggle" type="button" aria-pressed="false" disabled>Source</button>
     <button id="open" type="button">Open file</button>
   </header>
   <main class="sheet">
@@ -23,7 +24,13 @@
       <button id="welcome-open" type="button">Open a markdown file</button>
       <p class="welcome-note">Local files. Original formatting kept intact.</p>
     </section>
-    <article id="preview" class="markdown" aria-label="Rendered markdown"></article>
+    <div id="panes" class="panes">
+      <section id="source-pane" hidden>
+        <label for="source">Markdown source</label>
+        <textarea id="source" spellcheck="false" readonly></textarea>
+      </section>
+      <article id="preview" class="markdown" aria-label="Rendered markdown"></article>
+    </div>
   </main>
 </body>
 </html>

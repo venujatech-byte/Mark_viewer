@@ -43,7 +43,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Review desktop command boundaries.
 
 ## 4. Desktop editing
-- [ ] Add source and rendered mode controls.
+- [x] Add source and rendered mode controls.
 - [ ] Render live previews while typing.
 - [ ] Save through mdcore with visible dirty state.
 - [ ] Preserve edits made while saving.

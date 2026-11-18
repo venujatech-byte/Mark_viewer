@@ -3,6 +3,9 @@ const filename = document.querySelector('#filename');
 const preview = document.querySelector('#preview');
 const status = document.querySelector('#status');
 const errorBox = document.querySelector('#error');
+const toggleButton = document.querySelector('#toggle');
+const sourceInput = document.querySelector('#source');
+let editing = false;
 let active = null;
 let opening = false;
 
@@ -17,6 +20,8 @@ async function openFile() {
     const opened = await window.__TAURI__.core.invoke('open_document');
     if (!opened) return;
     active = opened;
+    sourceInput.value = active.source.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
+    toggleButton.disabled = false;
     document.querySelector('#welcome').hidden = true;
     filename.textContent = active.path.split(/[\\/]/).pop();
     filename.title = active.path;
@@ -36,3 +41,14 @@ async function openFile() {
 openButton.addEventListener('click', openFile);
 
 document.querySelector('#welcome-open').addEventListener('click', openFile);
+
+function toggleMode() {
+  if (!active) return;
+  editing = !editing;
+  document.querySelector('#source-pane').hidden = !editing;
+  document.querySelector('#panes').classList.toggle('editing', editing);
+  toggleButton.setAttribute('aria-pressed', String(editing));
+  toggleButton.textContent = editing ? 'Read' : 'Source';
+  if (editing) sourceInput.focus();
+}
+toggleButton.addEventListener('click', toggleMode);

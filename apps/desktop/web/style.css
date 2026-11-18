@@ -24,3 +24,6 @@ button { font: inherit; font-size: 14px; padding: 8px 14px; border: 1px solid #c
 .welcome p { color: #56615a; line-height: 1.7; }
 .welcome button { background: #202522; color: white; margin: 16px 0; }
 .welcome .welcome-note { font-size: 12px; }
+.panes.editing { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; }
+#source-pane label { display: block; color: #56615a; font-size: 12px; margin: 8px 0; }
+#source { display: block; width: 100%; min-height: 65vh; resize: vertical; border: 1px solid #c6cdca; border-radius: 6px; padding: 20px; font: 14px/1.7 ui-monospace, "SFMono-Regular", Consolas, monospace; color: inherit; background: transparent; }

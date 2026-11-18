@@ -10,6 +10,7 @@ function reader(invoke) {
     querySelector(selector) {
       if (!elements.has(selector)) elements.set(selector, {
         textContent: '', innerHTML: '', disabled: false,
+        classList: { toggle() {} }, setAttribute() {}, focus() {},
         addEventListener(name, callback) { this[name] = callback; },
       });
       return elements.get(selector);
@@ -59,4 +60,15 @@ test('only one native picker may be opened at a time', async () => {
   resolve(null);
   await pending;
   assert.equal(app.elements.get('#welcome-open').disabled, false);
+});
+
+test('the source toggle reveals source without changing rendered content', async () => {
+  const app = reader(async () => ({ path: '/notes/a.md', source: '\uFEFF# Heading\r\n', html: '<h1>Heading</h1>' }));
+  await app.open();
+  app.elements.get('#toggle').click();
+  assert.equal(app.elements.get('#source-pane').hidden, false);
+  assert.equal(app.elements.get('#source').value, '# Heading\n');
+  assert.equal(app.elements.get('#preview').innerHTML, '<h1>Heading</h1>');
+  app.elements.get('#toggle').click();
+  assert.equal(app.elements.get('#source-pane').hidden, true);
 });
