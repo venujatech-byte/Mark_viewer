@@ -27,14 +27,15 @@ custom editor explicit while testing.
 
 ## Package and install
 
-Install the VS Code packaging CLI, then package from the extension folder:
+Install the VS Code packaging CLI, then package from the extension folder. The
+VSIX contains no runtime Node dependencies:
 
 ```sh
 npm install --global @vscode/vsce@4.1.1
 npm --prefix extensions/vscode ci
 npm run wasm
 npm --prefix extensions/vscode run package
-code --install-extension extensions/vscode/mark-reader.mark-reader-0.1.0.vsix
+code --install-extension extensions/vscode/mark-reader-0.1.0.vsix
 ```
 
 `vscode:prepublish` rebuilds the TypeScript and copies the generated WASM and

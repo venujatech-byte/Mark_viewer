@@ -103,7 +103,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Add extension open and toggle commands.
 - [x] Dispose listeners and multiple editor instances safely.
 - [x] Test extension message and edit validation.
-- [ ] Package and smoke-test the installable extension.
+- [x] Package and smoke-test the installable extension.
 - [x] Review desktop and extension behavior together.
 
 ## 9. Documentation and packaging

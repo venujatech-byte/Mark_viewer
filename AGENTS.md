@@ -170,7 +170,8 @@ Native and WASM tests cover the same behavior, including BOM and multibyte edits
 ## VS Code dependencies
 Verified stable versions from npm before pinning:
 - typescript 7.0.2: compile and type-check the extension without a bundler.
-- @types/vscode 1.146.0: declarations for VS Code's Custom Text Editor API.
+- @types/vscode 1.144.0: VS Code API declarations matched to the minimum
+  supported editor version; VSCE rejects typings newer than `engines.vscode`.
 - @types/node 26.6.6: declarations for standard extension-host Node modules.
 Use the installed VS Code CLI for integration tests; no Electron test-download
 package is needed. The extension has its own npm manifest and lockfile.
@@ -190,9 +191,8 @@ views cannot submit concurrent source changes. Each view disposes its webview,
 document, save, and view-state listeners when closed.
 
 - @vscode/vsce 4.1.1: verified from npm on 2026-11-18; standard Microsoft
-  CLI for packaging installable VSIX files. Install globally for `npm run
-  package` in `extensions/vscode`; the environment registry was unavailable
-  during this run, so packaging could not be executed here.
+  CLI for packaging installable VSIX files. The extension package command uses
+  `--no-dependencies` because it has no runtime Node packages.
 
 The VS Code manifest declares custom-editor and command activation events explicitly
 for compatibility across the supported VS Code range. The Fedora smoke run opened
@@ -201,5 +201,6 @@ a fixture in the custom editor, rendered through WASM, edited it, and saved it.
 Final local verification on Fedora passed `scripts/check.sh` with
 `PATH=/tmp/mark-bindgen/bin:$PATH`: all-feature Rust build/clippy/tests, desktop
 Node tests, native/WASM parity, and VS Code build/lint/tests. A VS Code
-1.144.1 development-host smoke rendered Markdown and saved a source edit. VSIX packaging/install remains
-pending because the npm registry could not be reached to fetch `@vscode/vsce`.
+1.144.1 development-host smoke rendered Markdown and saved a source edit. The
+VSIX packages the extension entrypoint and static runtime assets with the locally
+installed `@vscode/vsce`.

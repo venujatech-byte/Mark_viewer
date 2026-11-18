@@ -7,3 +7,5 @@ scripts/**
 webview/**
 package-lock.json
 tsconfig.json
+!dist/**
+!media/**

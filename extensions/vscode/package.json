@@ -6,7 +6,7 @@
   "version": "0.1.0",
   "license": "MIT",
   "engines": {
-    "vscode": "^1.85.0"
+    "vscode": "^1.144.0"
   },
   "categories": [
     "Other"
@@ -17,12 +17,13 @@
     "lint": "tsc -p . --noEmit",
     "test": "node --test tests/*.test.cjs",
     "vscode:prepublish": "npm run build",
-    "package": "vsce package"
+    "package": "vsce package --no-dependencies"
   },
   "devDependencies": {
-    "typescript": "7.0.2",
-    "@types/vscode": "1.146.0",
-    "@types/node": "26.6.6"
+    "@types/node": "26.6.6",
+    "@types/vscode": "1.144.0",
+    "@vscode/vsce": "4.1.1",
+    "typescript": "7.0.2"
   },
   "contributes": {
     "customEditors": [
