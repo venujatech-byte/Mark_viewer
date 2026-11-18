@@ -88,3 +88,8 @@ body, button { font-family: var(--font); }
 button:disabled { cursor: default; color: var(--muted); border-color: var(--border); }
 button:not(:disabled):hover { border-color: var(--text); }
 button[aria-pressed="true"] { background: var(--inline-code); border-color: var(--text); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.skip-link { position: fixed; top: 8px; left: 16px; z-index: 5; padding: 12px 16px; color: var(--text); background: var(--surface); transform: translateY(-160%); }
+.skip-link:focus { transform: none; }
+#preview:focus-visible { outline-offset: 12px; }
+button, summary { -webkit-tap-highlight-color: transparent; }

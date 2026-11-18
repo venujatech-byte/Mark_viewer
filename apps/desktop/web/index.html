@@ -10,6 +10,7 @@
   <script type="module" src="app.js"></script>
 </head>
 <body>
+  <a class="skip-link" href="#preview">Skip to document</a>
   <header class="toolbar">
     <span class="brand"><svg width="22" height="22" aria-hidden="true"><symbol id="mark-symbol" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="18" stroke-linejoin="round"><path d="M54 178V72l74 45 74-45v106l-74-44Z"/><path d="M128 117v76" stroke-linecap="round"/></symbol><use href="#mark-symbol"/></svg>Mark</span>
     <h1 id="filename">No document open</h1>
@@ -32,7 +33,7 @@
         <label for="source">Markdown source</label>
         <textarea id="source" spellcheck="false"></textarea>
       </section>
-      <article id="preview" class="markdown" aria-label="Rendered markdown"></article>
+      <article id="preview" class="markdown" tabindex="0" aria-label="Rendered markdown"></article>
     </div>
   </main>
 </body>

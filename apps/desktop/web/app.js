@@ -63,6 +63,7 @@ function toggleMode() {
   toggleButton.setAttribute('aria-pressed', String(editing));
   toggleButton.textContent = editing ? 'Read' : 'Edit';
   if (editing) sourceInput.focus();
+  else preview.focus();
 }
 toggleButton.addEventListener('click', toggleMode);
 
@@ -90,7 +91,8 @@ sourceInput.addEventListener('input', () => {
 function refreshStatus() {
   openButton.disabled = opening || saving;
   saveButton.disabled = !isDirty() || saving || opening;
-  status.textContent = saving ? 'Saving…' : isDirty() ? 'Unsaved changes' : active ? 'Saved' : 'Open a markdown file to start reading.';
+  const message = saving ? 'Saving…' : isDirty() ? 'Unsaved changes' : active ? 'Saved' : 'Open a markdown file to start reading.';
+  if (status.textContent !== message) status.textContent = message;
   const title = active ? `${isDirty() ? '• ' : ''}${filename.textContent} — Mark` : 'Mark';
   if (document.title !== title) {
     document.title = title;
