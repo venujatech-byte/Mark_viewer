@@ -198,8 +198,8 @@ The VS Code manifest declares custom-editor and command activation events explic
 for compatibility across the supported VS Code range. The Fedora smoke run opened
 a fixture in the custom editor, rendered through WASM, edited it, and saved it.
 
-Final local verification on Fedora passed `PATH=/tmp/mark-bindgen/bin:$PATH
-scripts/check.sh`: all-feature Rust build/clippy/tests, desktop Node tests, native/WASM
-parity, and VS Code build/lint/tests. A VS Code 1.144.1 development-host smoke
-rendered a Markdown file and saved a source edit. VSIX packaging/install remains
+Final local verification on Fedora passed `scripts/check.sh` with
+`PATH=/tmp/mark-bindgen/bin:$PATH`: all-feature Rust build/clippy/tests, desktop
+Node tests, native/WASM parity, and VS Code build/lint/tests. A VS Code
+1.144.1 development-host smoke rendered Markdown and saved a source edit. VSIX packaging/install remains
 pending because the npm registry could not be reached to fetch `@vscode/vsce`.

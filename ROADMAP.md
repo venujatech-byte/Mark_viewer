@@ -116,4 +116,4 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Add continuous integration for Rust, frontend, and WASM.
 - [x] Record platform support and remaining limitations.
 - [x] Run final formatting, lint, and test checks.
-- [ ] Review the repository and verify 100+ meaningful commits.
+- [x] Review the repository and verify 100+ meaningful commits.

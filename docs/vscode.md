@@ -34,7 +34,7 @@ npm install --global @vscode/vsce@4.1.1
 npm --prefix extensions/vscode ci
 npm run wasm
 npm --prefix extensions/vscode run package
-code --install-extension extensions/vscode/mark-reader-0.1.0.vsix
+code --install-extension extensions/vscode/mark-reader.mark-reader-0.1.0.vsix
 ```
 
 `vscode:prepublish` rebuilds the TypeScript and copies the generated WASM and
