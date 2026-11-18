@@ -12,7 +12,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Test Unicode and empty documents.
 - [x] Escape embedded HTML in rendered output.
 - [x] Reject unsafe link destinations.
-- [ ] Add a renderer example for manual inspection.
+- [x] Add a renderer example for manual inspection.
 - [ ] Review core rendering and document its API.
 
 ## 2. Frontmatter and safe editing
