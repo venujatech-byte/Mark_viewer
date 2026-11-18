@@ -10,3 +10,5 @@ tauri-build = { version = "=2.7.5", features = [] }
 [dependencies]
 mdcore = { path = "../../crates/mdcore" }
 tauri = { version = "=2.12.6", features = [] }
+serde = { version = "=1.0.229", features = ["derive"] }
+tauri-plugin-dialog = "=2.8.4"
