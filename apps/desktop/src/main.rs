@@ -6,7 +6,11 @@ fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
         .manage(commands::ActiveDocument::default())
-        .invoke_handler(tauri::generate_handler![commands::open_document])
+        .invoke_handler(tauri::generate_handler![
+            commands::open_document,
+            commands::edit_source,
+            commands::render_document
+        ])
         .run(tauri::generate_context!())
         .expect("could not start Mark");
 }

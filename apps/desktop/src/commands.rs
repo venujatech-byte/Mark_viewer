@@ -40,6 +40,16 @@ pub async fn open_document(
     read_document(&path, &state).map(Some)
 }
 
+#[tauri::command]
+pub fn edit_source(source: String, updated: String) -> String {
+    mdcore::apply_editor_text(&source, &updated)
+}
+
+#[tauri::command]
+pub fn render_document(source: String) -> String {
+    render(&source)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

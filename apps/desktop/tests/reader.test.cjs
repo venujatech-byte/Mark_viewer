@@ -72,3 +72,17 @@ test('the source toggle reveals source without changing rendered content', async
   app.elements.get('#toggle').click();
   assert.equal(app.elements.get('#source-pane').hidden, true);
 });
+
+test('typing updates the rendered preview and retains dirty text', async () => {
+  const app = reader(async (command, data) => {
+    if (command === 'open_document') return { path: '/a.md', source: '# Old', html: '<h1>Old</h1>' };
+    if (command === 'edit_source') return data.updated;
+    if (command === 'render_document') return `<h1>${data.source.slice(2)}</h1>`;
+    throw new Error(command);
+  });
+  await app.open();
+  app.elements.get('#source').value = '# New';
+  await app.elements.get('#source').input();
+  assert.equal(app.elements.get('#preview').innerHTML, '<h1>New</h1>');
+  assert.equal(app.elements.get('#status').textContent, 'Unsaved changes');
+});
