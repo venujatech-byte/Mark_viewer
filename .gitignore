@@ -1,0 +1,8 @@
+/target/
+**/node_modules/
+**/dist/
+**/pkg/
+**/gen/
+*.vsix
+.taste-skill/
+.DS_Store
