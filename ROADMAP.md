@@ -69,7 +69,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Review rendering parity and security.
 
 ## 6. UI polish
-- [ ] Set the editor's typography and reading measure.
+- [x] Set the editor's typography and reading measure.
 - [ ] Follow system light and dark themes.
 - [ ] Polish toolbar and document identity.
 - [ ] Add accessible focus and semantic regions.

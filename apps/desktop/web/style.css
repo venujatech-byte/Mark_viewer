@@ -43,3 +43,21 @@ button { font: inherit; font-size: 14px; padding: 8px 14px; border: 1px solid #c
 /* CSP blocks inline styles, so retain the parser's table alignment via selectors. */
 .markdown [style*="text-align: right"] { text-align: right; }
 .markdown [style*="text-align: center"] { text-align: center; }
+:root { --font: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; --mono: ui-monospace, "SFMono-Regular", Consolas, monospace; }
+body, button { font-family: var(--font); }
+.markdown { max-width: 78ch; font-size: 17px; line-height: 1.75; }
+.markdown h1 { font-size: 32px; letter-spacing: -0.035em; }
+.markdown h2 { font-size: 24px; letter-spacing: -0.025em; }
+.markdown h3 { font-size: 20px; }
+.markdown h4, .markdown h5, .markdown h6 { font-size: 17px; }
+.markdown :is(h1,h2,h3,h4,h5,h6) { line-height: 1.3; font-weight: 650; margin: 1.8em 0 0.75em; scroll-margin-top: 80px; }
+.markdown > :first-child { margin-top: 0; }
+.markdown p { margin: 0 0 1.15em; }
+.markdown li { margin: 0.3em 0; }
+.markdown :is(ul,ol) { padding-left: 1.6em; }
+.markdown blockquote { margin: 24px 0; padding: 2px 20px; color: #56615a; border-left: 3px solid #c6cdca; }
+.markdown blockquote > :last-child { margin-bottom: 0; }
+.markdown hr { border: 0; border-top: 1px solid #e3e9e6; margin: 32px 0; }
+.markdown a { color: #206857; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.markdown input[type="checkbox"] { margin-inline-end: 6px; accent-color: #206857; }
+.footnote-definition { font-size: 14px; margin-top: 20px; }
