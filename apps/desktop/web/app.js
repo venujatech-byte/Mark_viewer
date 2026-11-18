@@ -14,6 +14,7 @@ let opening = false;
 let editQueue = Promise.resolve();
 let savedEditor = '';
 let revision = 0;
+let imageUrls = [];
 let closing = false;
 let closeGuardReady = false;
 sourceInput.readOnly = true;
@@ -145,7 +146,24 @@ document.addEventListener('keydown', event => {
 });
 
 function showPreview(html) {
+  for (const url of imageUrls) URL.revokeObjectURL(url);
+  imageUrls = [];
   preview.innerHTML = html;
+  for (const image of preview.querySelectorAll('img')) {
+    image.loading = 'lazy';
+    const url = image.getAttribute('src');
+    if (!url || /^https?:/i.test(url)) continue;
+    image.removeAttribute('src');
+    window.__TAURI__.core.invoke('read_image', { url }).then(bytes => {
+      if (!preview.contains(image)) return;
+      const extension = decodeURIComponent(url.split(/[?#]/)[0]).split('.').pop().toLowerCase();
+      const type = extension === 'svg' ? 'svg+xml' : extension === 'jpg' ? 'jpeg' : extension;
+      const blob = new Blob([bytes instanceof ArrayBuffer ? bytes : new Uint8Array(bytes)], { type: `image/${type}` });
+      const objectUrl = URL.createObjectURL(blob);
+      imageUrls.push(objectUrl);
+      image.src = objectUrl;
+    }).catch(error => { image.title = `Image unavailable: ${error}`; });
+  }
   const ids = new Set([...preview.querySelectorAll('[id]')].map(node => node.id));
   for (const heading of preview.querySelectorAll('h1,h2,h3,h4,h5,h6')) {
     const base = heading.textContent.toLowerCase().trim().replace(/[^\p{L}\p{N}_\s-]/gu, '').replace(/\s+/g, '-') || 'section';

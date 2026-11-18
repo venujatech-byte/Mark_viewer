@@ -15,7 +15,8 @@ fn main() {
             commands::save_document,
             commands::confirm_discard,
             commands::open_external,
-            commands::open_relative
+            commands::open_relative,
+            commands::read_image
         ])
         .build(tauri::generate_context!())
         .expect("could not start Mark")

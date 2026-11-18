@@ -130,6 +130,50 @@ pub fn open_relative(
     read_document(&path, &state).map(Some)
 }
 
+fn image_bytes(document: &Path, url: &str) -> Result<Vec<u8>, String> {
+    use std::io::Read;
+    let path = local_path(document, url)?;
+    let parent = document.parent().ok_or("document has no parent")?;
+    let extension = path
+        .extension()
+        .and_then(|ext| ext.to_str())
+        .unwrap_or("")
+        .to_ascii_lowercase();
+    if !path.starts_with(parent)
+        || !matches!(
+            extension.as_str(),
+            "png" | "jpg" | "jpeg" | "gif" | "webp" | "svg" | "avif" | "bmp"
+        )
+    {
+        return Err("local images must be image files inside the document folder".into());
+    }
+    let metadata = std::fs::metadata(&path).map_err(|error| error.to_string())?;
+    const LIMIT: u64 = 10 * 1024 * 1024;
+    if !metadata.is_file() || metadata.len() > LIMIT {
+        return Err("image must be a regular file no larger than 10 MiB".into());
+    }
+    let mut bytes = Vec::new();
+    std::fs::File::open(path)
+        .map_err(|error| error.to_string())?
+        .take(LIMIT + 1)
+        .read_to_end(&mut bytes)
+        .map_err(|error| error.to_string())?;
+    if bytes.len() as u64 > LIMIT {
+        return Err("image exceeds 10 MiB".into());
+    }
+    Ok(bytes)
+}
+
+#[tauri::command]
+pub async fn read_image(
+    state: tauri::State<'_, ActiveDocument>,
+    url: String,
+) -> Result<tauri::ipc::Response, String> {
+    let guard = state.lock().map_err(|error| error.to_string())?;
+    image_bytes(guard.as_ref().ok_or("no document is open")?.path(), &url)
+        .map(tauri::ipc::Response::new)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -214,5 +258,21 @@ mod tests {
         ] {
             assert!(local_path(&path, link).is_err());
         }
+    }
+    #[test]
+    fn image_reads_are_bounded_to_the_selected_document_folder() {
+        let dir = tempfile::tempdir().unwrap();
+        let folder = dir.path().join("docs");
+        std::fs::create_dir(&folder).unwrap();
+        let document = folder.join("README.md");
+        std::fs::write(&document, "text").unwrap();
+        std::fs::write(folder.join("image.png"), [1, 2, 3]).unwrap();
+        std::fs::write(dir.path().join("private.png"), [4, 5]).unwrap();
+        assert_eq!(image_bytes(&document, "./image.png").unwrap(), [1, 2, 3]);
+        assert!(image_bytes(&document, "../private.png").is_err());
+        assert!(image_bytes(&document, "README.md").is_err());
+        let oversized = std::fs::File::create(folder.join("large.png")).unwrap();
+        oversized.set_len(10 * 1024 * 1024 + 1).unwrap();
+        assert!(image_bytes(&document, "large.png").is_err());
     }
 }

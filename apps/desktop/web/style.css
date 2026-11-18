@@ -35,3 +35,4 @@ button { font: inherit; font-size: 14px; padding: 8px 14px; border: 1px solid #c
 .hljs-title, .hljs-built_in { color: #175da2; }
 .hljs-number, .hljs-symbol { color: #8c4c12; }
 .hljs-comment { color: #66716a; font-style: italic; }
+.markdown img { max-width: 100%; height: auto; border-radius: 4px; }

@@ -63,7 +63,7 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Add syntax highlighting with an existing maintained library.
 - [x] Open safe external links through the host.
 - [x] Resolve local markdown links relative to the current file.
-- [ ] Resolve local images with restricted access.
+- [x] Resolve local images with restricted access.
 - [ ] Give tables and long code safe overflow behavior.
 - [ ] Test malicious markdown and resource URLs.
 - [ ] Review rendering parity and security.
