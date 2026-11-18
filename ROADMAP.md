@@ -98,8 +98,8 @@ follow-up fixes when evidence requires them. No WYSIWYG, cloud, or plugin system
 - [x] Preserve BOM and newline conventions.
 - [x] Integrate native save and dirty tracking.
 - [x] Constrain webview CSP and resource roots.
-- [ ] Resolve relative images through webview URIs.
-- [ ] Handle safe links through VS Code.
+- [x] Resolve relative images through webview URIs.
+- [x] Handle safe links through VS Code.
 - [ ] Add extension open and toggle commands.
 - [ ] Dispose listeners and multiple editor instances safely.
 - [ ] Test extension message and edit validation.

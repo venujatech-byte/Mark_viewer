@@ -9,6 +9,7 @@ async function webview() {
     if (!elements.has(selector)) elements.set(selector, {
       value: '', selectionStart: 0, selectionEnd: 0,
       setSelectionRange(start, end) { this.selectionStart = start; this.selectionEnd = end; },
+      querySelectorAll() { return []; },
       classList: { toggle() {} }, setAttribute() {}, focus() {},
       addEventListener(name, callback) { this[name] = callback; },
     });

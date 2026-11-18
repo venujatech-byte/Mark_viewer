@@ -1,5 +1,8 @@
 import * as vscode from 'vscode';
-import { readFileSync } from 'node:fs';
+import { dirname, extname } from 'node:path';
+import { readFileSync, realpathSync } from 'node:fs';
+import { realpath } from 'node:fs/promises';
+import { imagePath, linkUrl } from './resources';
 import { randomBytes } from 'node:crypto';
 import { webviewHtml, webviewCsp } from './html';
 import { editingError } from './encoding';
@@ -12,7 +15,9 @@ export function activate(context: vscode.ExtensionContext): void {
   const provider: vscode.CustomTextEditorProvider = {
     resolveCustomTextEditor(document, panel) {
       const media = vscode.Uri.joinPath(context.extensionUri, 'media');
-      panel.webview.options = { enableScripts: true, enableCommandUris: false, localResourceRoots: [media] };
+      const roots = [media];
+      if (document.uri.scheme === 'file') roots.push(vscode.Uri.file(realpathSync(dirname(document.uri.fsPath))));
+      panel.webview.options = { enableScripts: true, enableCommandUris: false, localResourceRoots: roots };
       const nonce = randomBytes(16).toString('hex');
       const asset = (name: string) => panel.webview.asWebviewUri(vscode.Uri.joinPath(media, name)).toString();
       const csp = webviewCsp(panel.webview.cspSource, nonce);
@@ -29,6 +34,20 @@ export function activate(context: vscode.ExtensionContext): void {
       const messages = panel.webview.onDidReceiveMessage(async (message: unknown) => {
         if (message && typeof message === 'object' && 'type' in message && message.type === 'ready') {
           await panel.webview.postMessage(snapshot());
+        } else if (message && typeof message === 'object' && 'type' in message && message.type === 'link' && 'url' in message && typeof message.url === 'string') {
+          try {
+            const url = await linkUrl(document.uri.fsPath, message.url);
+            if (['https:', 'http:', 'mailto:'].includes(url.protocol)) await vscode.env.openExternal(vscode.Uri.parse(url.toString()));
+            else if (url.protocol === 'file:' && document.uri.scheme === 'file' && ['.md', '.markdown', '.mdown'].includes(extname(url.pathname).toLowerCase())) {
+              const path = await realpath(url);
+              await vscode.commands.executeCommand('vscode.openWith', vscode.Uri.file(path), viewType);
+            }
+          } catch { /* Invalid or unsupported links stay inert. */ }
+        } else if (message && typeof message === 'object' && 'type' in message && message.type === 'image' && 'id' in message && Number.isSafeInteger(message.id) && 'url' in message && typeof message.url === 'string') {
+          try {
+            const path = await imagePath(document.uri.fsPath, message.url);
+            await panel.webview.postMessage({ type: 'imageResult', id: message.id, uri: panel.webview.asWebviewUri(vscode.Uri.file(path)).toString() });
+          } catch { await panel.webview.postMessage({ type: 'imageResult', id: message.id }); }
         } else if (message && typeof message === 'object' && 'type' in message && message.type === 'save') {
           try {
             if (safetyError()) throw new Error(safetyError());

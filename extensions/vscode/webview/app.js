@@ -9,12 +9,23 @@ const save = document.querySelector('#save');
 let saveRequested = false;
 const toggle = document.querySelector('#toggle');
 let raw = '', version = 0, sequence = 0, pending = null, queued = false, blocked = false, loaded = false;
+const images = new Map();
+let imageSequence = 0;
 source.readOnly = true;
 document.querySelector('#open').disabled = true;
 
 function show(text) {
+  images.clear();
   preview.innerHTML = render(text) || '<p class="empty-document">This file is empty.</p>';
   window.decorateMarkdown(preview);
+  for (const image of preview.querySelectorAll('img')) {
+    const url = image.getAttribute('src') || '';
+    if (/^https?:/i.test(url)) continue;
+    image.removeAttribute('src');
+    const id = ++imageSequence;
+    images.set(id, image);
+    vscode.postMessage({ type: 'image', id, url });
+  }
 }
 
 function sendEdit() {
@@ -46,6 +57,12 @@ window.addEventListener('keydown', event => {
 
 window.addEventListener('message', event => {
   const message = event.data;
+  if (message.type === 'imageResult') {
+    const image = images.get(message.id);
+    images.delete(message.id);
+    if (image?.isConnected && message.uri) image.src = message.uri;
+    return;
+  }
   if (message.type === 'saveResult') {
     if (!message.saved) error.textContent = message.error || 'Save was canceled or failed. Your edits remain in VS Code.';
     if (pending === null && !blocked) status.textContent = message.saved && !message.dirty ? 'Saved' : 'Unsaved changes';
@@ -85,6 +102,17 @@ window.addEventListener('message', event => {
   status.textContent = message.dirty ? 'Unsaved changes' : 'Saved';
   toggle.disabled = false;
   loaded = true;
+});
+
+preview.addEventListener('click', event => {
+  const link = event.target.closest('a');
+  if (!link) return;
+  event.preventDefault();
+  if (link.getAttribute('href')?.startsWith('#')) {
+    preview.querySelector(link.getAttribute('href'))?.scrollIntoView();
+    return;
+  }
+  vscode.postMessage({ type: 'link', url: link.getAttribute('href') });
 });
 
 source.addEventListener('input', () => {
