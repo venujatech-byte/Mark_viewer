@@ -4,8 +4,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mark</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
 </head>
 <body>
-  <main><h1>Mark</h1><p>A quiet place for your markdown.</p></main>
+  <header class="toolbar">
+    <span class="brand">Mark</span>
+    <h1 id="filename">No document open</h1>
+    <button id="open" type="button">Open file</button>
+  </header>
+  <main class="sheet">
+    <p id="status" role="status">Open a markdown file to start reading.</p>
+    <article id="preview" class="markdown" aria-label="Rendered markdown"></article>
+  </main>
 </body>
 </html>
